@@ -1,0 +1,125 @@
+/* ============================================
+   About Page Styles
+   ============================================ */
+
+.about-header {
+  padding: 4rem 0 2rem;
+  background: var(--color-surface);
+}
+
+/* Story */
+.about-story {
+  padding: var(--section-py) 0;
+  background: var(--color-bg);
+}
+
+.about-story-content {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+}
+
+.about-story-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-heading);
+  margin-bottom: 1.25rem;
+}
+
+.about-story-content p {
+  font-size: 1.0625rem;
+  color: var(--color-text);
+  line-height: 1.8;
+}
+
+.about-story-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Values */
+.about-values {
+  padding: var(--section-py) 0;
+  background: var(--color-surface);
+}
+
+.about-value-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  height: 100%;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.about-value-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.about-value-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.about-value-icon .bi {
+  font-size: 1.25rem;
+  color: #FFFFFF;
+}
+
+.about-value-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--color-heading);
+  margin-bottom: 0.5rem;
+}
+
+.about-value-desc {
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* CTA */
+.about-cta {
+  padding: var(--section-py) 0 var(--section-py-lg);
+  background: var(--color-bg);
+}
+
+.about-cta-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--color-heading);
+  margin-bottom: 1rem;
+}
+
+.about-cta-desc {
+  font-size: 1.0625rem;
+  color: var(--color-text);
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+.about-cta-btn {
+  font-weight: 600;
+  padding: 0.8125rem 2rem;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (max-width: 767.98px) {
+  .about-story-content {
+    padding: 1.5rem;
+  }
+}

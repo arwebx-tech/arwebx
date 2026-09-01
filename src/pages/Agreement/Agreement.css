@@ -1,0 +1,124 @@
+/* ============================================
+   Agreement Page Styles
+   ============================================ */
+
+.agreement-header {
+  padding: 4rem 0 2rem;
+  background: var(--color-surface);
+}
+
+.agreement-content {
+  padding: var(--section-py) 0;
+  background: var(--color-bg);
+}
+
+.agreement-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+}
+
+.agreement-section {
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.agreement-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0;
+}
+
+.agreement-section-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-heading);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.agreement-section-number {
+  font-weight: 800;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.agreement-section-content {
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Disclaimer */
+.agreement-disclaimer {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-secondary);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.agreement-disclaimer .bi {
+  color: var(--color-secondary);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.agreement-disclaimer p {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* CTA */
+.agreement-cta {
+  padding: 0 0 var(--section-py-lg);
+  background: var(--color-bg);
+}
+
+.agreement-cta-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--color-heading);
+  margin-bottom: 1rem;
+}
+
+.agreement-cta-desc {
+  font-size: 1.0625rem;
+  color: var(--color-text);
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+.agreement-cta-btn {
+  font-weight: 600;
+  padding: 0.8125rem 2rem;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (max-width: 767.98px) {
+  .agreement-card {
+    padding: 1.5rem;
+  }
+
+  .agreement-section-title {
+    font-size: 1.125rem;
+  }
+}

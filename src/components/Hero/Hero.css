@@ -1,0 +1,435 @@
+/* ============================================
+   React Bits Pro Hero 7 Official Visual Layout
+   Top Centered Typography + 3D Arc Rotating Carousel + Vertical Laser Beam
+   ============================================ */
+
+.hero-section.hero-7-official {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 0 3rem;
+  background: var(--color-bg);
+  min-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ----- Glow Backgrounds ----- */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-glow-primary {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.12) 0%, transparent 70%);
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hero-glow-secondary {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+  bottom: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ----- Top Header Content ----- */
+.hero-7-header {
+  position: relative;
+  z-index: 5;
+  margin-bottom: 4rem;
+}
+
+.hero-7-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
+  color: var(--color-heading);
+  line-height: 1.12;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+}
+
+.hero-title-highlight {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline;
+}
+
+.hero-7-subtitle {
+  font-size: 1.1875rem;
+  color: var(--color-text);
+  line-height: 1.75;
+  margin: 0 auto 2.25rem;
+  max-width: 680px;
+}
+
+/* ----- CTA Group ----- */
+.hero-7-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-hero-7-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.875rem 2.25rem;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.35);
+}
+
+.btn-hero-7-primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.45);
+  color: #FFFFFF;
+}
+
+.btn-hero-7-primary .bi {
+  transition: transform var(--transition-fast);
+}
+
+.btn-hero-7-primary:hover .bi {
+  transform: translateX(4px);
+}
+
+.btn-hero-7-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.875rem 2.25rem;
+  background: transparent;
+  color: var(--color-heading);
+  border: 2px solid var(--color-border);
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.btn-hero-7-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+/* ----- Hero Feature Highlights Row ----- */
+.hero-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.highlight-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--color-heading);
+}
+
+.highlight-item .icon-check {
+  color: #10B981;
+  font-size: 1.125rem;
+}
+
+.highlight-item .icon-mobile {
+  color: #0284C7;
+  font-size: 1.125rem;
+}
+
+.highlight-item .icon-whatsapp {
+  color: #16A34A;
+  font-size: 1.125rem;
+}
+
+/* ==============================================================
+   HERO 7 3D ARC CAROUSEL & VERTICAL LASER BEAM
+   ============================================================== */
+
+.hero-7-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  margin: 0 auto;
+  perspective: 1200px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ----- Central Vertical Laser Line ----- */
+.hero-7-laser {
+  position: absolute;
+  top: 10px;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.laser-beam-core {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(14, 165, 233, 0.5) 15%,
+    var(--color-primary) 50%,
+    var(--color-secondary) 85%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 12px var(--color-primary),
+    0 0 22px var(--color-secondary),
+    0 0 43px var(--color-primary);
+}
+
+.laser-beam-flare {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 80%;
+  background: radial-gradient(ellipse at center, rgba(79, 70, 229, 0.3) 0%, rgba(14, 165, 233, 0.15) 45%, transparent 70%);
+  filter: blur(10px);
+}
+
+.laser-sparkles span {
+  position: absolute;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  box-shadow: 0 0 10px var(--color-secondary);
+  animation: laserPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes laserPulse {
+  0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(0.8); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.5); }
+}
+
+/* ----- 3D Track & Cards ----- */
+.hero-7-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.hero-7-card {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -130px;
+  width: 320px;
+  height: 260px;
+  transform-style: preserve-3d;
+  will-change: transform, filter, opacity;
+  transition: box-shadow var(--transition-base);
+  cursor: pointer;
+}
+
+.hero-7-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: #0F172A;
+  transition: transform var(--transition-base), border-color var(--transition-base);
+}
+
+.card-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.layer-grayscale {
+  filter: grayscale(1) contrast(1.1) brightness(0.85);
+  z-index: 1;
+}
+
+.layer-color {
+  filter: grayscale(0) contrast(1) brightness(1);
+  z-index: 2;
+  will-change: clip-path;
+}
+
+.hero-7-card:hover .hero-7-card-inner {
+  border-color: var(--color-primary);
+  box-shadow: 0 20px 50px rgba(79, 70, 229, 0.3);
+}
+
+.hero-7-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow);
+}
+
+.hero-7-card:hover .hero-7-card-img {
+  transform: scale(1.08);
+}
+
+.hero-7-card-content {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.2) 60%, transparent 100%);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.hero-7-card-cat {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+
+.hero-7-card-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================== */
+
+@media (max-width: 991.98px) {
+  .hero-section.hero-7-official {
+    padding: 3.5rem 0 2rem;
+  }
+
+  .hero-7-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-7-carousel-wrapper {
+    height: 280px;
+  }
+
+  .hero-7-card {
+    width: 260px;
+    height: 210px;
+    margin-top: -105px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero-section.hero-7-official {
+    padding: 2.5rem 0 2rem;
+  }
+
+  .hero-7-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-hero-7-primary,
+  .btn-hero-7-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-7-carousel-wrapper {
+    height: 230px;
+  }
+
+  .hero-7-card {
+    width: 210px;
+    height: 170px;
+    margin-top: -85px;
+  }
+
+  .hero-7-card-title {
+    font-size: 0.9375rem;
+  }
+
+  .hero-7-card-cat {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-7-carousel-wrapper {
+    height: 190px;
+  }
+
+  .hero-7-card {
+    width: 160px;
+    height: 135px;
+    margin-top: -67px;
+  }
+
+  .hero-7-card-content {
+    padding: 0.75rem;
+  }
+
+  .hero-7-card-title {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ----- Reduced Motion ----- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-7-card {
+    transition: none !important;
+  }
+
+  .laser-sparkles span {
+    animation: none;
+  }
+}

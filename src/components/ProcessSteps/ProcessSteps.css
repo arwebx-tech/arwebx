@@ -1,0 +1,87 @@
+/* ============================================
+   ProcessSteps Component Styles
+   ============================================ */
+
+.process-steps {
+  position: relative;
+}
+
+.process-step-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  height: 100%;
+  position: relative;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.process-step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.process-step-number {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  opacity: 0.1;
+  position: absolute;
+  top: 0.75rem;
+  right: 1.25rem;
+  line-height: 1;
+}
+
+.process-step-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.process-step-icon .bi {
+  font-size: 1.25rem;
+  color: #FFFFFF;
+}
+
+.process-step-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--color-heading);
+  margin-bottom: 0.625rem;
+}
+
+.process-step-desc {
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Timeline connector line (desktop) */
+@media (min-width: 992px) {
+  .process-timeline {
+    position: absolute;
+    top: 50%;
+    left: 12%;
+    right: 12%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    opacity: 0.15;
+    transform: translateY(-50%);
+    z-index: 0;
+    border-radius: 1px;
+  }
+
+  .process-step-card {
+    position: relative;
+    z-index: 1;
+  }
+}

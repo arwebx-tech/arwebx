@@ -1,0 +1,48 @@
+/* ============================================
+   NotFound (404) Page Styles
+   ============================================ */
+
+.not-found {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--section-py) 0;
+  background: var(--color-bg);
+}
+
+.not-found-code {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(6rem, 15vw, 12rem);
+  line-height: 1;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.15;
+  margin-bottom: 1rem;
+}
+
+.not-found-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--color-heading);
+  margin-bottom: 0.75rem;
+}
+
+.not-found-desc {
+  font-size: 1.0625rem;
+  color: var(--color-text);
+  max-width: 400px;
+  margin: 0 auto 2rem;
+}
+
+.not-found-btn {
+  font-weight: 600;
+  padding: 0.8125rem 2rem;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+}

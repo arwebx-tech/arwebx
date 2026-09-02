@@ -21,9 +21,9 @@ export default function Services() {
           aria-labelledby={`service-${service.id}`}
         >
           <div className="container">
-            <div className="row align-items-center g-5">
+            <div className="row align-items-center g-5 reveal-up">
               <div className={`col-lg-6 ${index % 2 !== 0 ? 'order-lg-2' : ''}`}>
-                <div className="service-detail-visual">
+                <div className="service-detail-visual reveal-scale">
                   {service.image ? (
                     <div className="service-image-card">
                       <img
@@ -41,7 +41,6 @@ export default function Services() {
                 </div>
               </div>
               <div className="col-lg-6">
-                <span className="service-detail-label">{String(index + 1).padStart(2, '0')}</span>
                 <h2 className="service-detail-title" id={`service-${service.id}`}>
                   {service.title}
                 </h2>
@@ -62,7 +61,7 @@ export default function Services() {
 
       {/* CTA */}
       <section className="services-cta" aria-label="Get started">
-        <div className="container text-center">
+        <div className="container text-center reveal-up">
           <h2 className="services-cta-title">Ready to get started?</h2>
           <p className="services-cta-desc">
             Tell us about your project and we'll help you find the right solution.

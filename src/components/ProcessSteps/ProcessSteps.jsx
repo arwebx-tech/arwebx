@@ -32,9 +32,9 @@ export default function ProcessSteps() {
   return (
     <div className="process-steps">
       <div className="process-timeline" aria-hidden="true"></div>
-      <div className="row g-4">
+      <div className="row g-4 stagger-group">
         {steps.map((step, index) => (
-          <div className="col-md-6 col-lg-3" key={index}>
+          <div className="col-md-6 col-lg-3 stagger-item" key={index}>
             <div className="process-step-card">
               <div className="process-step-number">{step.number}</div>
               <div className="process-step-icon">

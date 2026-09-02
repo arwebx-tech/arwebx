@@ -1,8 +1,8 @@
-import businessImg from '../assets/services/business.webp';
-import landingImg from '../assets/services/landing.webp';
-import clinicImg from '../assets/services/clinic.webp';
-import packersImg from '../assets/services/packers.webp';
-import restaurantImg from '../assets/services/restaurant.webp';
+import businessImg from '../assets/services/business.jpg';
+import landingImg from '../assets/services/landing.jpg';
+import clinicImg from '../assets/services/clinic.jpg';
+import packersImg from '../assets/services/packers.jpg';
+import restaurantImg from '../assets/services/restaurant.jpg';
 
 export const services = [
   {
@@ -65,9 +65,9 @@ export const services = [
     ],
   },
   {
-    id: 'restaurant-website',
+    id: 'restaurant-websites',
     icon: 'bi-restaurant',
-    title: 'Restaurant Website',
+    title: 'Restaurant Websites',
     image: restaurantImg,
     shortDesc: 'Restaurant website designed for trust and online booking.',
     description:

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
-import clinicImg from '../../assets/images/clinic.webp';
-import fertilizersImg from '../../assets/images/fertilizers.webp';
-import interiorImg from '../../assets/images/interior.webp';
-import portfolioImg from '../../assets/images/portfolio.webp';
-import restaurantImg from '../../assets/images/restaurant.webp';
-import saloonImg from '../../assets/images/saloon.webp';
+import clinicImg from '../../assets/images/clinic.jpg';
+import fertilizersImg from '../../assets/images/fertilizers.jpg';
+import interiorImg from '../../assets/images/interior.jpg';
+import portfolioImg from '../../assets/images/portfolio.jpg';
+import restaurantImg from '../../assets/images/restaurant.jpg';
+import saloonImg from '../../assets/images/saloon.jpg';
 
 const CAROUSEL_ITEMS = [
   {

@@ -18,7 +18,7 @@ export default function Contact() {
           <div className="row g-5">
             {/* Form Column */}
             <div className="col-lg-7">
-              <div className="contact-form-card">
+              <div className="contact-form-card reveal-up">
                 <h2 className="contact-form-title">Project Enquiry</h2>
                 <p className="contact-form-desc">
                   Fill out the form below and we'll get back to you as soon as possible.
@@ -29,7 +29,7 @@ export default function Contact() {
 
             {/* Info Column */}
             <div className="col-lg-5">
-              <div className="contact-info-card">
+              <div className="contact-info-card reveal-up">
                 <h3 className="contact-info-title">Direct Contact</h3>
                 <p className="contact-info-desc">
                   Prefer to reach out directly? Contact us through WhatsApp or give us a call.

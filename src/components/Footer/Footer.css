@@ -67,10 +67,6 @@
   padding-left: 4px;
 }
 
-.footer-contact-links a {
-  gap: 0.625rem;
-}
-
 .footer-contact-links .bi {
   font-size: 1rem;
   color: var(--color-primary);
@@ -80,13 +76,24 @@
   border-top: 1px solid var(--color-border);
   margin-top: 3rem;
   padding: 1.5rem 0;
-  text-align: center;
 }
 
 .footer-bottom p {
   margin: 0;
   font-size: 0.875rem;
   color: var(--color-text-light);
+}
+
+.footer-legal-links a {
+  color: var(--color-text-light);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-legal-links a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
 }
 
 @media (max-width: 767.98px) {

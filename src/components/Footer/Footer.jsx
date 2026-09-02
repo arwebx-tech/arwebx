@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../../assets/logo/logo.webp';
+import logoImg from '../../assets/logo/logo.png';
 import './Footer.css';
 
 export default function Footer() {
@@ -28,7 +28,6 @@ export default function Footer() {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/services">Services</Link></li>
               <li><Link to="/about">About</Link></li>
-              <li><Link to="/agreement">Agreement</Link></li>
               <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
@@ -69,8 +68,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="footer-bottom">
+        <div className="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
           <p>&copy; {currentYear} ARWEBX. All rights reserved.</p>
+          <div className="footer-legal-links">
+            <Link to="/agreement">Project Terms</Link>
+          </div>
         </div>
       </div>
     </footer>

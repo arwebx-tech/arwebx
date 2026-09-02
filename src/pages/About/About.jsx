@@ -51,7 +51,7 @@ export default function About() {
         <div className="container-fluid px-3 px-md-5">
           <div className="row justify-content-center">
             <div className="col-lg-12">
-              <div className="about-story-content">
+              <div className="about-story-content reveal-up">
                 <h2 className="about-story-title">Our Approach</h2>
                 <p>
                   At ARWEBX, we believe that a great website is more than just good looks. It's a 
@@ -78,13 +78,15 @@ export default function About() {
       {/* Values Section */}
       <section className="about-values" aria-label="Our values">
         <div className="container-fluid px-3 px-md-5">
-          <SectionHeading
-            title="Our Core Principles"
-            align="start"
-          />
-          <div className="row g-4">
+          <div className="reveal-up">
+            <SectionHeading
+              title="Our Core Principles"
+              align="start"
+            />
+          </div>
+          <div className="row g-4 stagger-group">
             {values.map((value, index) => (
-              <div className="col-md-6 col-lg-4" key={index}>
+              <div className="col-md-6 col-lg-4 stagger-item" key={index}>
                 <div className="about-value-card">
                   <div className="about-value-icon">
                     <i className={`bi ${value.icon}`} aria-hidden="true"></i>
@@ -100,7 +102,7 @@ export default function About() {
 
       {/* CTA */}
       <section className="about-cta" aria-label="Get in touch">
-        <div className="container-fluid px-3 px-md-5 text-center">
+        <div className="container-fluid px-3 px-md-5 text-center reveal-up">
           <h2 className="about-cta-title">Let's work together</h2>
           <p className="about-cta-desc">
             Have a project in mind? Let's discuss how ARWEBX can help you build a website that works.

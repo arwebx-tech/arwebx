@@ -3,7 +3,13 @@
    ============================================ */
 
 .section-heading {
-  margin-bottom: 3rem;
+  margin-bottom: 2.25rem;
+}
+
+@media (max-width: 767.98px) {
+  .section-heading {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .section-label {

@@ -2,11 +2,6 @@
    About Page Styles
    ============================================ */
 
-.about-header {
-  padding: 4rem 0 2rem;
-  background: var(--color-surface);
-}
-
 /* Story */
 .about-story {
   padding: var(--section-py) 0;

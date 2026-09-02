@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import logoImg from '../../assets/logo/logo.webp'
+import logoImg from '../../assets/logo/logo.png'
 import './Navbar.css';
 
 export default function Navbar() {
@@ -63,11 +63,6 @@ export default function Navbar() {
             <li className="nav-item">
               <NavLink className="nav-link" to="/about" onClick={closeMobileMenu}>
                 About
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/agreement" onClick={closeMobileMenu}>
-                Agreement
               </NavLink>
             </li>
             <li className="nav-item">

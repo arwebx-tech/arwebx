@@ -20,19 +20,19 @@ ARWEBX (`https://arwebx.in`) is a high-performance web development studio specia
   - Green WhatsApp Icon: `WhatsApp Enquiries`
 
 ### 2. Branding & Asset Updates
-- **Logo Integration**: Replaced text logo (`ARWEBX`) in both **Navbar** and **Footer** with the official WebP logo from `src/assets/logo/logo.webp`.
-- **Favicon & Tab Icon**: Updated browser tab favicon to `/tab.webp` and `/favicon.svg`.
+- **Logo Integration**: Replaced text logo (`ARWEBX`) in both **Navbar** and **Footer** with the official WebP logo from `src/assets/logo/logo.png`.
+- **Favicon & Tab Icon**: Updated browser tab favicon to `/favicon.ico` and `/favicon.svg`.
 - **Open Graph & Social Preview**: Configured Open Graph (`og:image`) and Twitter Card (`twitter:image`) meta tags pointing to `/og_img.png` (`https://arwebx.in/og_img.png`).
 - **Global Meta Title**: Updated site title across `index.html` and `SEOHead` component to:
   `ARWEBX | Modern Websites for Growing Businesses`
 
 ### 3. Services Page & Data Offerings (`/services`)
 - **Updated Services Dataset** (`src/data/services.js`):
-  1. **Business Websites** → `business.webp`
-  2. **Landing Pages** → `landing.webp` (Custom generated SaaS mockup)
-  3. **Clinic Websites** → `clinic.webp`
-  4. **Packers & Movers Websites** → `packers.webp`
-  5. **Restaurant Website** → `restaurant.webp`
+  1. **Business Websites** → `business.jpg`
+  2. **Landing Pages** → `landing.jpg` (Custom generated SaaS mockup)
+  3. **Clinic Websites** → `clinic.jpg`
+  4. **Packers & Movers Websites** → `packers.jpg`
+  5. **Restaurant Websites** → `restaurant.jpg`
 - **Real Website Mockup Cards**: Replaced icon placeholders on the Services page with interactive mockup cards (`.service-image-card`).
 - **Cleaned Layout**: Removed redundant top grid cards, keeping the detailed section layout.
 
@@ -79,16 +79,16 @@ d:/arwebx_website/arwebx/
 ├── public/
 │   ├── favicon.svg
 │   ├── og_img.png                # Social media preview image
-│   ├── tab.webp                  # Browser tab icon
+│   ├── favicon.ico               # Browser tab icon
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── src/
 │   ├── App.jsx                   # Lazy routes, Suspense, ScrollToTop, useScrollReveal
 │   ├── index.css                 # Design tokens, CSS reset, scroll-reveal classes
 │   ├── assets/
-│   │   ├── logo/logo.webp        # Brand logo
-│   │   ├── images/               # Hero 3D carousel WebP images
-│   │   └── services/             # Service detail WebP images
+│   │   ├── logo/logo.png         # Brand logo
+│   │   ├── images/               # Hero 3D carousel jpg images
+│   │   └── services/             # Service detail jpg images
 │   ├── components/
 │   │   ├── Navbar/               # Header navbar with logo and links
 │   │   ├── Footer/               # Footer matched to light navbar theme

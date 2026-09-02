@@ -2,11 +2,6 @@
    Contact Page Styles
    ============================================ */
 
-.contact-header {
-  padding: 4rem 0 2rem;
-  background: var(--color-surface);
-}
-
 .contact-body {
   padding: var(--section-py) 0 var(--section-py-lg);
   background: var(--color-bg);

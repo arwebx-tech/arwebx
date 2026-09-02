@@ -4,7 +4,7 @@
 
 .floating-actions {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: 3.75rem;
   right: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -76,15 +76,6 @@
   backdrop-filter: blur(8px);
 }
 
-/* Tooltip Little Arrow Pointing to Button */
-.floating-tooltip::after {
-  content: '';
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
 .floating-btn:hover .floating-tooltip {
   opacity: 1;
   visibility: visible;
@@ -108,7 +99,7 @@
 
 @media (max-width: 767.98px) {
   .floating-actions {
-    bottom: 1rem;
+    bottom: 2.75rem;
     right: 1rem;
   }
 

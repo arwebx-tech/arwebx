@@ -85,9 +85,9 @@ export default function Agreement() {
         <div className="container-fluid px-3 px-md-5">
           <div className="row justify-content-center">
             <div className="col-lg-12">
-              <div className="agreement-card">
+              <div className="agreement-card reveal-up stagger-group">
                 {sections.map((section, index) => (
-                  <div className="agreement-section" key={index}>
+                  <div className="agreement-section stagger-item" key={index}>
                     <h2 className="agreement-section-title">
                       <span className="agreement-section-number">
                         {String(index + 1).padStart(2, '0')}
@@ -105,7 +105,7 @@ export default function Agreement() {
 
       {/* CTA */}
       <section className="agreement-cta" aria-label="Discuss your project">
-        <div className="container-fluid px-3 px-md-5 text-center">
+        <div className="container-fluid px-3 px-md-5 text-center reveal-up">
           <h2 className="agreement-cta-title">Ready to discuss your project?</h2>
           <p className="agreement-cta-desc">
             Get in touch and let's talk about how we can work together.

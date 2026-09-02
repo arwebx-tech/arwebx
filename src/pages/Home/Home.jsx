@@ -23,15 +23,15 @@ export default function Home() {
       {/* Services Section */}
       <section className="home-services" id="services" aria-labelledby="services-heading">
         <div className="container-fluid px-3 px-md-5">
-          <div className="services-section-header">
+          <div className="services-section-header reveal-up">
             <SectionHeading title="Arwebx Can Build" align="start" />
             <Link to="/services" className="btn-show-more">
               View All <i className="bi bi-arrow-right" aria-hidden="true"></i>
             </Link>
           </div>
-          <div className="row g-4">
+          <div className="row g-4 stagger-group">
             {services.slice(0, 3).map((service) => (
-              <div className="col-md-6 col-lg-4" key={service.id}>
+              <div className="col-md-6 col-lg-4 stagger-item" key={service.id}>
                 <ServiceCard
                   icon={service.icon}
                   title={service.title}
@@ -47,11 +47,13 @@ export default function Home() {
       {/* Why ARWEBX Section */}
       <section className="home-why" aria-labelledby="why-heading">
         <div className="container-fluid px-3 px-md-5">
-          <SectionHeading
-            title="Why Choose Arwebx"
-            align="start"
-          />
-          <div className="row g-4">
+          <div className="reveal-up">
+            <SectionHeading
+              title="Why Choose Arwebx"
+              align="start"
+            />
+          </div>
+          <div className="row g-4 stagger-group">
             {[
               {
                 icon: 'bi-lightning-charge',
@@ -84,7 +86,7 @@ export default function Home() {
                 desc: 'We understand your goals first, then design and build solutions that serve them.',
               },
             ].map((item, index) => (
-              <div className="col-md-6 col-lg-4" key={index}>
+              <div className="col-md-6 col-lg-4 stagger-item" key={index}>
                 <div className="why-card">
                   <div className="why-card-icon">
                     <i className={`bi ${item.icon}`} aria-hidden="true"></i>
@@ -101,10 +103,12 @@ export default function Home() {
       {/* Process Section */}
       <section className="home-process" aria-labelledby="process-heading">
         <div className="container-fluid px-3 px-md-5">
-          <SectionHeading
-            title="How Arwebx Can Work"
-            align="start"
-          />
+          <div className="reveal-up">
+            <SectionHeading
+              title="How Arwebx Can Work"
+              align="start"
+            />
+          </div>
           <ProcessSteps />
         </div>
       </section>
@@ -112,7 +116,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="home-cta" aria-label="Call to action">
         <div className="container">
-          <div className="cta-card">
+          <div className="cta-card reveal-up">
             <h2 className="cta-title">Ready to build something great?</h2>
             <p className="cta-desc">
               Let's discuss your project and see how we can help you turn your website into a growth engine.

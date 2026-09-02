@@ -26,8 +26,8 @@
   --font-body: "Inter", sans-serif;
 
   /* Spacing */
-  --section-py: 5rem;
-  --section-py-lg: 7rem;
+  --section-py: 3.25rem;
+  --section-py-lg: 5rem;
 
   /* Border Radius */
   --radius-sm: 0.375rem;
@@ -47,6 +47,13 @@
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@media (max-width: 767.98px) {
+  :root {
+    --section-py: 1.75rem;
+    --section-py-lg: 2.75rem;
+  }
+}
+
 /* ----- Global Reset ----- */
 *,
 *::before,
@@ -58,9 +65,22 @@
 
 /* ----- Base ----- */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth !important;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 body {
@@ -161,4 +181,67 @@ img {
 ::selection {
   background-color: var(--color-primary);
   color: #FFFFFF;
+}
+
+/* ============================================
+   Scroll & Page Reveal Animations (GPU Accelerated)
+   ============================================ */
+
+.reveal,
+.reveal-up,
+.reveal-scale,
+.stagger-item {
+  will-change: transform, opacity;
+  transition: opacity 550ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 550ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Only hide elements that are explicitly pending reveal below viewport */
+.reveal-pending.reveal-up {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal-pending.reveal-scale {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.reveal-pending.stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.reveal-pending.is-visible,
+.reveal-pending.is-visible .stagger-item,
+.stagger-item.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+/* Stagger Item Delays */
+.stagger-group .stagger-item,
+.stagger-item {
+  transition-delay: calc(var(--stagger-index, 0) * 80ms);
+}
+
+/* Automatic Nth-Child Stagger Delays */
+.stagger-item:nth-child(1) { --stagger-index: 0; }
+.stagger-item:nth-child(2) { --stagger-index: 1; }
+.stagger-item:nth-child(3) { --stagger-index: 2; }
+.stagger-item:nth-child(4) { --stagger-index: 3; }
+.stagger-item:nth-child(5) { --stagger-index: 4; }
+.stagger-item:nth-child(6) { --stagger-index: 5; }
+.stagger-item:nth-child(7) { --stagger-index: 6; }
+.stagger-item:nth-child(8) { --stagger-index: 7; }
+
+/* Prefers Reduced Motion Safety */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-pending {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }

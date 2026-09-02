@@ -26,7 +26,7 @@ export default function Home() {
           <div className="services-section-header reveal-up">
             <SectionHeading title="Arwebx Can Build" align="start" />
             <Link to="/services" className="btn-show-more">
-              View All <i className="bi bi-arrow-right" aria-hidden="true"></i>
+              View <i className="bi bi-arrow-right" aria-hidden="true"></i>
             </Link>
           </div>
           <div className="row g-4 stagger-group">

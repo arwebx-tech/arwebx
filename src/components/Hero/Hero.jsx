@@ -65,60 +65,129 @@ export default function Hero() {
       const delta = now - lastTime;
       lastTime = now;
 
-      // Move horizontal offset continuously (no hover pause)
-      offsetRef.current += delta * 0.045;
-
       const container = containerRef.current;
       if (container) {
         const cards = container.querySelectorAll('.hero-7-card');
         const containerWidth = container.offsetWidth || 1200;
-        const cardWidth = 320;
-        const gap = 24;
-        const totalUnitWidth = cardWidth + gap;
-        const totalTrackWidth = totalUnitWidth * DISPLAY_ITEMS.length;
+        const isMobile = containerWidth < 768;
 
-        cards.forEach((card, index) => {
-          // Calculate looped X position for each card
-          let rawX = (index * totalUnitWidth + offsetRef.current) % totalTrackWidth;
+        // Dynamic animation speed: smartphone (0.032 - 0.035) vs desktop/tablet (0.045)
+        const speed = isMobile
+          ? (containerWidth < 431 ? 0.032 : 0.035)
+          : 0.045;
 
-          // If rawX goes past the right edge, wrap it seamlessly to the left (off-screen)
-          if (rawX > containerWidth + totalUnitWidth * 2) {
-            rawX -= totalTrackWidth;
+        offsetRef.current += delta * speed;
+
+        if (isMobile) {
+          // ==========================================
+          // SMARTPHONE-ONLY 3D CURVE IMPLEMENTATION
+          // ==========================================
+          // Use offsetWidth to get true unscaled layout width (prevents scale jitter)
+          const actualCardWidth = cards[0]?.offsetWidth || 160;
+
+          // Responsive smartphone spacing factor (0.68 to 0.72 * actual card width)
+          let spacingFactor = 0.72;
+          if (containerWidth < 360) {
+            spacingFactor = 0.68;
+          } else if (containerWidth < 390) {
+            spacingFactor = 0.70;
+          } else if (containerWidth < 430) {
+            spacingFactor = 0.71;
+          } else {
+            spacingFactor = 0.72;
           }
 
-          // Center offset (-0.5 to 0.5 ratio across visible width)
-          const centerX = containerWidth / 2 - cardWidth / 2;
-          const distFromCenter = rawX - centerX;
-          const normalizedDist = distFromCenter / (containerWidth / 1.8);
+          const totalUnitWidth = actualCardWidth * spacingFactor;
+          const totalTrackWidth = totalUnitWidth * DISPLAY_ITEMS.length;
+          const centerX = containerWidth / 2 - actualCardWidth / 2;
+          const spreadFactor = containerWidth * 0.45;
 
-          // 3D Arc Rotation & Depth calculation
-          const rotateY = -normalizedDist * 28; // Curved rotation in degrees
-          const translateZ = -Math.pow(Math.abs(normalizedDist), 1.8) * 120; // Recede in 3D arc
-          const scale = Math.max(0.8, 1 - Math.abs(normalizedDist) * 0.15);
+          cards.forEach((card, index) => {
+            let rawX = (index * totalUnitWidth + offsetRef.current) % totalTrackWidth;
 
-          // Apply 3D transform
-          card.style.transform = `translate3d(${rawX}px, 0, ${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+            if (rawX > containerWidth + totalUnitWidth * 2) {
+              rawX -= totalTrackWidth;
+            }
 
-          // Edge fading so off-screen wrapping is 100% invisible
-          const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(normalizedDist) * 0.85, 2));
-          card.style.opacity = edgeFade.toFixed(2);
+            const offsetFromCenter = rawX - centerX;
+            const rawNormalized = offsetFromCenter / spreadFactor;
+            const normalized = Math.max(-1, Math.min(1, rawNormalized));
 
-          // Pixel-precise Laser Beam Reveal Math
-          // Center laser position relative to container
-          const laserX = containerWidth / 2;
-          const cardLeft = rawX;
+            // Subtle downward vertical arc: arcY ≈ 0 at center, up to ~24px at sides
+            const arcY = Math.pow(Math.abs(normalized), 1.7) * 24;
 
-          // Cut distance from left edge of card to laser line
-          const cutDist = laserX - cardLeft;
-          let revealPercent = (cutDist / cardWidth) * 100;
-          revealPercent = Math.max(0, Math.min(100, revealPercent));
+            // 3D Depth calculations for mobile curve
+            const rotateY = -Math.max(-24, Math.min(24, normalized * 24));
+            const translateZ = -Math.pow(Math.min(1.2, Math.abs(normalized)), 1.7) * 70;
+            const scale = Math.max(0.88, 1 - Math.min(1, Math.abs(normalized)) * 0.12);
 
-          // Apply clip-path inset to top full-color layer
-          const colorLayer = card.querySelector('.layer-color');
-          if (colorLayer) {
-            colorLayer.style.clipPath = `inset(0 0 0 ${revealPercent}%)`;
-          }
-        });
+            // Stacking order: center card highest z-index, side cards lower
+            const zIndex = Math.round(100 - Math.abs(normalized) * 50);
+            card.style.zIndex = zIndex;
+
+            // Apply 3D transform with arcY
+            card.style.transform = `translate3d(${rawX.toFixed(1)}px, ${arcY.toFixed(1)}px, ${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
+
+            // Edge fading so off-screen wrapping is 100% invisible
+            const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(rawNormalized) * 0.85, 2));
+            card.style.opacity = edgeFade.toFixed(2);
+
+            // Laser reveal math
+            const laserX = containerWidth / 2;
+            const cardLeft = rawX;
+            const cutDist = laserX - cardLeft;
+            let revealPercent = (cutDist / actualCardWidth) * 100;
+            revealPercent = Math.max(0, Math.min(100, revealPercent));
+
+            const colorLayer = card.querySelector('.layer-color');
+            if (colorLayer) {
+              colorLayer.style.clipPath = `inset(0 0 0 ${revealPercent}%)`;
+            }
+          });
+        } else {
+          // ==========================================
+          // DESKTOP & TABLET IMPLEMENTATION (UNCHANGED)
+          // ==========================================
+          const cardWidth = 320;
+          const gap = 24;
+          const totalUnitWidth = cardWidth + gap;
+          const totalTrackWidth = totalUnitWidth * DISPLAY_ITEMS.length;
+
+          cards.forEach((card, index) => {
+            let rawX = (index * totalUnitWidth + offsetRef.current) % totalTrackWidth;
+
+            if (rawX > containerWidth + totalUnitWidth * 2) {
+              rawX -= totalTrackWidth;
+            }
+
+            const centerX = containerWidth / 2 - cardWidth / 2;
+            const distFromCenter = rawX - centerX;
+            const normalizedDist = distFromCenter / (containerWidth / 1.8);
+
+            const rotateY = -normalizedDist * 28;
+            const translateZ = -Math.pow(Math.abs(normalizedDist), 1.8) * 120;
+            const scale = Math.max(0.8, 1 - Math.abs(normalizedDist) * 0.15);
+
+            const zIndex = Math.round(100 - Math.abs(normalizedDist) * 50);
+            card.style.zIndex = zIndex;
+
+            card.style.transform = `translate3d(${rawX}px, 0, ${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+
+            const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(normalizedDist) * 0.85, 2));
+            card.style.opacity = edgeFade.toFixed(2);
+
+            const laserX = containerWidth / 2;
+            const cardLeft = rawX;
+            const cutDist = laserX - cardLeft;
+            let revealPercent = (cutDist / cardWidth) * 100;
+            revealPercent = Math.max(0, Math.min(100, revealPercent));
+
+            const colorLayer = card.querySelector('.layer-color');
+            if (colorLayer) {
+              colorLayer.style.clipPath = `inset(0 0 0 ${revealPercent}%)`;
+            }
+          });
+        }
       }
 
       animRef.current = requestAnimationFrame(animate);

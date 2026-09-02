@@ -21,6 +21,10 @@
   margin-bottom: 0;
 }
 
+.services-section-header .section-heading .section-title {
+  margin-bottom: 0;
+}
+
 .btn-show-more {
   display: inline-flex;
   align-items: center;

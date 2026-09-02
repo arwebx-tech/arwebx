@@ -11,7 +11,7 @@ import saloonImg from '../../assets/images/saloon.jpg';
 const CAROUSEL_ITEMS = [
   {
     id: 1,
-    title: 'Clinic & Healthcare Website',
+    title: 'Clinic & Healthcare Websites',
     category: 'Healthcare',
     img: clinicImg,
   },
@@ -35,88 +35,168 @@ const CAROUSEL_ITEMS = [
   },
   {
     id: 5,
-    title: 'Restaurant & Dining',
-    category: 'Restaurant Website',
+    title: 'Restaurant Websites',
+    category: 'Restaurant Websites',
     img: restaurantImg,
   },
   {
     id: 6,
-    title: 'Salon & Spa',
+    title: 'Salon & Spa Websites',
     category: 'Lifestyle & Wellness',
     img: saloonImg,
   },
 ];
 
-// Create a larger array of items for seamless off-screen looping
+// Create 18 items for smooth, continuous, seamless off-screen looping
 const DISPLAY_ITEMS = [...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS];
 
 export default function Hero() {
   const containerRef = useRef(null);
   const animRef = useRef(null);
   const offsetRef = useRef(0);
+  const dimsRef = useRef({
+    containerWidth: 1200,
+    cardWidth: 300,
+    spacingFactor: 0.78,
+    totalUnitWidth: 234,
+    totalTrackWidth: 4212,
+    speed: 0.045,
+    isMobile: false,
+  });
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
+    // Helper to calculate & cache layout dimensions based on rendered card size
+    const updateDimensions = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const cards = container.querySelectorAll('.hero-7-card');
+      const containerWidth = container.offsetWidth || window.innerWidth || 1200;
+
+      let cardWidth = 300;
+      if (cards.length > 0) {
+        const rect = cards[0].getBoundingClientRect();
+        if (rect.width > 0) {
+          cardWidth = rect.width;
+        }
+      }
+
+      // Pixel-based spacing logic based on actual card width
+      let spacingFactor = 0.78;
+      let speed = 0.045;
+      let isMobile = false;
+
+      if (containerWidth <= 480) {
+        spacingFactor = 0.68;
+        speed = 0.032;
+        isMobile = true;
+      } else if (containerWidth <= 767) {
+        spacingFactor = 0.70;
+        speed = 0.035;
+        isMobile = true;
+      } else if (containerWidth <= 991) {
+        spacingFactor = 0.72;
+        speed = 0.038;
+      }
+
+      const totalUnitWidth = cardWidth * spacingFactor;
+      const totalTrackWidth = totalUnitWidth * DISPLAY_ITEMS.length;
+
+      dimsRef.current = {
+        containerWidth,
+        cardWidth,
+        spacingFactor,
+        totalUnitWidth,
+        totalTrackWidth,
+        speed,
+        isMobile,
+      };
+    };
+
+    // Initial measurement
+    updateDimensions();
+
+    // ResizeObserver for efficient dimension updates on viewport changes
+    let resizeObserver;
+    if (window.ResizeObserver && containerRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        updateDimensions();
+      });
+      resizeObserver.observe(containerRef.current);
+    }
+
+    const handleWindowResize = () => updateDimensions();
+    window.addEventListener('resize', handleWindowResize);
+
     let lastTime = performance.now();
 
+    // Optimized animation loop (transforms & clipPath only)
     const animate = (now) => {
       const delta = now - lastTime;
       lastTime = now;
 
-      // Move horizontal offset continuously (no hover pause)
-      offsetRef.current += delta * 0.045;
+      const dims = dimsRef.current;
+      offsetRef.current += delta * dims.speed;
 
       const container = containerRef.current;
       if (container) {
         const cards = container.querySelectorAll('.hero-7-card');
-        const containerWidth = container.offsetWidth || 1200;
-        const cardWidth = 320;
-        const gap = 24;
-        const totalUnitWidth = cardWidth + gap;
-        const totalTrackWidth = totalUnitWidth * DISPLAY_ITEMS.length;
+        const { containerWidth, cardWidth, totalUnitWidth, totalTrackWidth, isMobile } = dims;
+        const centerX = containerWidth / 2 - cardWidth / 2;
 
         cards.forEach((card, index) => {
-          // Calculate looped X position for each card
-          let rawX = (index * totalUnitWidth + offsetRef.current) % totalTrackWidth;
-          
-          // If rawX goes past the right edge, wrap it seamlessly to the left (off-screen)
-          if (rawX > containerWidth + totalUnitWidth * 2) {
-            rawX -= totalTrackWidth;
+          // Calculate center-relative position formula
+          const basePos = index * totalUnitWidth + offsetRef.current;
+          let offsetFromCenter = ((basePos % totalTrackWidth) + totalTrackWidth) % totalTrackWidth;
+          if (offsetFromCenter > totalTrackWidth / 2) {
+            offsetFromCenter -= totalTrackWidth;
           }
 
-          // Center offset (-0.5 to 0.5 ratio across visible width)
-          const centerX = containerWidth / 2 - cardWidth / 2;
-          const distFromCenter = rawX - centerX;
-          const normalizedDist = distFromCenter / (containerWidth / 1.8);
+          const rawX = centerX + offsetFromCenter;
+          const distFromCenter = offsetFromCenter;
 
-          // 3D Arc Rotation & Depth calculation
-          const rotateY = -normalizedDist * 28; // Curved rotation in degrees
-          const translateZ = -Math.pow(Math.abs(normalizedDist), 1.8) * 120; // Recede in 3D arc
-          const scale = Math.max(0.8, 1 - Math.abs(normalizedDist) * 0.15);
+          // Responsive normalized distance, 3D values & real vertical arc
+          const spreadFactor = isMobile
+            ? Math.max(containerWidth / 1.15, cardWidth * 1.8)
+            : containerWidth / 1.8;
 
-          // Apply 3D transform
-          card.style.transform = `translate3d(${rawX}px, 0, ${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+          const normalized = Math.max(-1, Math.min(1, distFromCenter / spreadFactor));
 
-          // Edge fading so off-screen wrapping is 100% invisible
-          const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(normalizedDist) * 0.85, 2));
+          // Real Vertical Arc Y calculation (center card Y=0, edge cards move downward)
+          const arcY = Math.pow(Math.abs(normalized), 1.7) * (isMobile ? 24 : 30);
+
+          // Mobile-specific 3D values (rotateY: +-24deg, translateZ: max -70px, scale: 0.86-1.0)
+          const maxRotate = isMobile ? 24 : 28;
+          const maxZ = isMobile ? 70 : 120;
+          const minScale = isMobile ? 0.86 : 0.80;
+
+          const rotateY = -normalized * maxRotate;
+          const translateZ = -Math.pow(Math.abs(normalized), 1.7) * maxZ;
+          const scale = Math.max(minScale, 1 - Math.abs(normalized) * (1 - minScale));
+
+          // Apply 3D transform with X, vertical arcY, Z depth, Y rotation and scale
+          card.style.transform = `translate3d(${rawX.toFixed(1)}px, ${arcY.toFixed(1)}px, ${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
+
+          // Z-index layering so center card sits on top
+          const zIndex = Math.round(100 - Math.abs(normalized) * 50);
+          card.style.zIndex = zIndex;
+
+          // Edge fading so off-screen wrapping is 100% smooth
+          const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(normalized) * 0.85, 2));
           card.style.opacity = edgeFade.toFixed(2);
 
-          // Pixel-precise Laser Beam Reveal Math
-          // Center laser position relative to container
+          // Precision Laser Beam Reveal Math
           const laserX = containerWidth / 2;
-          const cardLeft = rawX;
-          
-          // Cut distance from left edge of card to laser line
-          const cutDist = laserX - cardLeft;
+          const cutDist = laserX - rawX;
           let revealPercent = (cutDist / cardWidth) * 100;
           revealPercent = Math.max(0, Math.min(100, revealPercent));
 
-          // Apply clip-path inset to top full-color layer
           const colorLayer = card.querySelector('.layer-color');
           if (colorLayer) {
-            colorLayer.style.clipPath = `inset(0 0 0 ${revealPercent}%)`;
+            colorLayer.style.clipPath = `inset(0 0 0 ${revealPercent.toFixed(1)}%)`;
           }
         });
       }
@@ -128,6 +208,8 @@ export default function Hero() {
 
     return () => {
       if (animRef.current) cancelAnimationFrame(animRef.current);
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener('resize', handleWindowResize);
     };
   }, []);
 
@@ -174,20 +256,11 @@ export default function Hero() {
         </div>
 
         {/* Hero 7 Official 3D Arc Carousel Track */}
-        <div
-          className="hero-7-carousel-wrapper"
-          aria-hidden="true"
-        >
+        <div className="hero-7-carousel-wrapper" aria-hidden="true">
           {/* Vertical Central Glowing Laser Line */}
           <div className="hero-7-laser">
             <div className="laser-beam-core"></div>
             <div className="laser-beam-flare"></div>
-            <div className="laser-sparkles">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
           </div>
 
           {/* 3D Curved Track */}

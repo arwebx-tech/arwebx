@@ -6,9 +6,9 @@
 .hero-section.hero-7-official {
   position: relative;
   overflow: hidden;
-  padding: 5rem 0 3rem;
+  padding: 2.25rem 0 2rem;
   background: var(--color-bg);
-  min-height: 95vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -45,7 +45,7 @@
 .hero-7-header {
   position: relative;
   z-index: 5;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .hero-7-title {
@@ -64,14 +64,6 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline;
-}
-
-.hero-7-subtitle {
-  font-size: 1.1875rem;
-  color: var(--color-text);
-  line-height: 1.75;
-  margin: 0 auto 2.25rem;
-  max-width: 680px;
 }
 
 /* ----- CTA Group ----- */
@@ -176,19 +168,21 @@
    HERO 7 3D ARC CAROUSEL & VERTICAL LASER BEAM
    ============================================================== */
 
+/* Desktop height 340px, perspective 1200px */
 .hero-7-carousel-wrapper {
   position: relative;
   width: 100%;
   height: 340px;
   margin: 0 auto;
   perspective: 1200px;
+  -webkit-perspective: 1200px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ----- Central Vertical Laser Line ----- */
+/* Laser stays centered */
 .hero-7-laser {
   position: absolute;
   top: 10px;
@@ -228,39 +222,29 @@
   filter: blur(10px);
 }
 
-.laser-sparkles span {
-  position: absolute;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--color-secondary);
-  box-shadow: 0 0 10px var(--color-secondary);
-  animation: laserPulse 2.5s ease-in-out infinite;
-}
-
-@keyframes laserPulse {
-  0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(0.8); }
-  50% { opacity: 1; transform: translateX(-50%) scale(1.5); }
-}
-
 /* ----- 3D Track & Cards ----- */
 .hero-7-track {
   position: relative;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
+/* Desktop Card Size & transform-origin */
 .hero-7-card {
   position: absolute;
   top: 50%;
   left: 0;
-  margin-top: -130px;
-  width: 320px;
-  height: 260px;
+  margin-top: -120px;
+  width: 300px;
+  height: 240px;
+  transform-origin: center center;
   transform-style: preserve-3d;
-  will-change: transform, filter, opacity;
+  -webkit-transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, opacity;
   transition: box-shadow var(--transition-base);
   cursor: pointer;
 }
@@ -350,32 +334,47 @@
 
 @media (max-width: 991.98px) {
   .hero-section.hero-7-official {
-    padding: 3.5rem 0 2rem;
+    padding: 1.75rem 0 1.5rem;
   }
 
   .hero-7-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
   }
 
+  /* Tablet Carousel Height: 290px */
   .hero-7-carousel-wrapper {
-    height: 280px;
+    height: 290px;
   }
 
+  /* Tablet Card Size: 240px x 195px */
   .hero-7-card {
-    width: 260px;
-    height: 210px;
-    margin-top: -105px;
+    width: 240px;
+    height: 195px;
+    margin-top: -97px;
   }
 }
 
 @media (max-width: 767.98px) {
   .hero-section.hero-7-official {
-    padding: 2.5rem 0 2rem;
+    padding: 1.25rem 0 1.25rem;
+  }
+
+  .hero-7-header {
+    text-align: left !important;
+  }
+
+  .hero-7-title {
+    text-align: left;
   }
 
   .hero-7-cta-group {
     flex-direction: column;
     width: 100%;
+    align-items: stretch;
+  }
+
+  .hero-highlights {
+    justify-content: flex-start;
   }
 
   .btn-hero-7-primary,
@@ -384,42 +383,66 @@
     justify-content: center;
   }
 
+  /* Mobile Perspective 850px, Height 250px */
   .hero-7-carousel-wrapper {
-    height: 230px;
+    height: 250px;
+    perspective: 850px;
+    -webkit-perspective: 850px;
   }
 
+  /* Mobile Card Size: 170px x 140px */
   .hero-7-card {
-    width: 210px;
-    height: 170px;
-    margin-top: -85px;
+    width: 170px;
+    height: 140px;
+    margin-top: -70px;
   }
 
-  .hero-7-card-title {
-    font-size: 0.9375rem;
+  /* Mobile Card Content Formatting */
+  .hero-7-card-content {
+    padding: 0.65rem;
   }
 
   .hero-7-card-cat {
-    font-size: 0.6875rem;
+    font-size: 0.65rem;
+    margin-bottom: 2px;
+  }
+
+  .hero-7-card-title {
+    font-size: 0.82rem;
+    line-height: 1.25;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
 @media (max-width: 480px) {
+  /* Mobile 390-430px Height: 240px */
   .hero-7-carousel-wrapper {
-    height: 190px;
+    height: 240px;
   }
 
+  /* Mobile Card Size: 160px x 132px */
   .hero-7-card {
     width: 160px;
-    height: 135px;
-    margin-top: -67px;
+    height: 132px;
+    margin-top: -66px;
+  }
+}
+
+@media (max-width: 374.98px) {
+  /* Small Mobile Height: 230px */
+  .hero-7-carousel-wrapper {
+    height: 230px;
   }
 
-  .hero-7-card-content {
-    padding: 0.75rem;
-  }
-
-  .hero-7-card-title {
-    font-size: 0.8125rem;
+  /* 320px screen card width approx 145px */
+  .hero-7-card {
+    width: 145px;
+    height: 120px;
+    margin-top: -60px;
   }
 }
 
@@ -427,9 +450,5 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-7-card {
     transition: none !important;
-  }
-
-  .laser-sparkles span {
-    animation: none;
   }
 }

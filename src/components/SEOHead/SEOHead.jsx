@@ -7,8 +7,9 @@ import { useEffect } from 'react';
 export default function SEOHead({
   title,
   description,
+  keywords = 'best freelancer in ongole, best freelancer in andhrapradesh, best freelancer in hyderabad, freelancer in ongole, freelancer in andhrapradesh, freelancer in hyderabad, websites creator, website creator, web developer in ongole, web developer in hyderabad, website designer andhra pradesh, ARWEBX',
   canonical,
-  image = 'https://arwebx.in/og_img.png',
+  image = 'https://arwebx.vercel.app/og_img.png',
   ogType = 'website',
 }) {
   useEffect(() => {
@@ -26,8 +27,9 @@ export default function SEOHead({
       el.setAttribute('content', content);
     };
 
-    // Meta description
+    // Meta description & keywords
     setMeta('name', 'description', description);
+    setMeta('name', 'keywords', keywords);
 
     // Canonical
     let link = document.querySelector('link[rel="canonical"]');
@@ -50,7 +52,7 @@ export default function SEOHead({
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
     setMeta('name', 'twitter:image', image);
-  }, [title, description, canonical, image, ogType]);
+  }, [title, description, keywords, canonical, image, ogType]);
 
   return null;
 }

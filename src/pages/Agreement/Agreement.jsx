@@ -77,7 +77,7 @@ export default function Agreement() {
       <SEOHead
         title="Freelance Web Development Agreement | ARWEBX"
         description="Review the ARWEBX freelance web development project working terms covering scope, payment, revisions, intellectual property, and more."
-        canonical="https://arwebx.in/agreement"
+        canonical="https://arwebx.vercel.app/agreement"
       />
 
       {/* Agreement Content */}

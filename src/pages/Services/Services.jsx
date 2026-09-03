@@ -8,9 +8,10 @@ export default function Services() {
   return (
     <>
       <SEOHead
-        title="Web Development Services | ARWEBX"
-        description="Professional web development services including business websites, landing pages, and custom React web applications. Built for performance and conversions."
-        canonical="https://arwebx.in/services"
+        title="Web Development Services & Website Creator | ARWEBX"
+        description="Professional website creation services by the best freelancer in Ongole, Hyderabad, and Andhra Pradesh. Business websites, landing pages & web apps."
+        keywords="websites creator, best freelancer in ongole, best freelancer in hyderabad, best freelancer in andhrapradesh, website creator"
+        canonical="https://arwebx.vercel.app/services"
       />
 
       {/* Detailed Services */}

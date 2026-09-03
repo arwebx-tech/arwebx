@@ -7,9 +7,10 @@ export default function Contact() {
   return (
     <>
       <SEOHead
-        title="Contact ARWEBX | Start Your Web Project"
-        description="Get in touch with ARWEBX to discuss your web development project. Send us a message, call us, or reach out on WhatsApp."
-        canonical="https://arwebx.in/contact"
+        title="Contact ARWEBX | Freelance Website Creator in Ongole & Hyderabad"
+        description="Hire the best freelancer in Ongole, Hyderabad & Andhra Pradesh. Contact ARWEBX today for custom website creation and web development."
+        keywords="freelancer in ongole, freelancer in hyderabad, freelancer in andhrapradesh, websites creator, contact website creator"
+        canonical="https://arwebx.vercel.app/contact"
       />
 
       {/* Contact Body */}

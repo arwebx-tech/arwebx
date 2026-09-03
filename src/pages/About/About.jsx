@@ -41,9 +41,10 @@ export default function About() {
   return (
     <>
       <SEOHead
-        title="About ARWEBX | Freelance Web Developer"
-        description="ARWEBX is a freelance web development studio focused on building fast, modern, conversion-focused websites and applications for growing businesses."
-        canonical="https://arwebx.in/about"
+        title="About ARWEBX | Best Freelancer & Website Creator in Ongole, Hyderabad & AP"
+        description="Learn about ARWEBX — the top freelance web developer and website creator serving clients in Ongole, Hyderabad, Andhra Pradesh, and globally."
+        keywords="best freelancer in ongole, best freelancer in andhrapradesh, best freelancer in hyderabad, freelancer in ongole, freelancer in andhrapradesh, freelancer in hyderabad, websites creator"
+        canonical="https://arwebx.vercel.app/about"
       />
 
       {/* Story Section */}

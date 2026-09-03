@@ -12,9 +12,10 @@ export default function Home() {
   return (
     <>
       <SEOHead
-        title="ARWEBX | Modern Websites for Growing Businesses"
-        description="ARWEBX builds fast, modern, conversion-focused websites and web applications that help businesses build trust and turn visitors into real enquiries."
-        canonical="https://arwebx.in/"
+        title="ARWEBX | Create Modern Websites for Growing Businesses"
+        description="ARWEBX is the best freelance web developer and website creator in Ongole, Hyderabad, and Andhra Pradesh. We build fast, modern, conversion-focused websites and web applications."
+        keywords="best freelancer in ongole, best freelancer in andhrapradesh, best freelancer in hyderabad, freelancer in ongole, freelancer in andhrapradesh, freelancer in hyderabad, websites creator, website creator, web developer ongole, web developer hyderabad"
+        canonical="https://arwebx.vercel.app/"
       />
 
       {/* Hero Section */}

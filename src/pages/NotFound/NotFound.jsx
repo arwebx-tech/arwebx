@@ -9,7 +9,7 @@ export default function NotFound() {
       <SEOHead
         title="Page Not Found | ARWEBX"
         description="The page you're looking for doesn't exist. Return to the ARWEBX homepage."
-        canonical="https://arwebx.in/"
+        canonical="https://arwebx.vercel.app/"
       />
 
       <section className="not-found" aria-label="Page not found">

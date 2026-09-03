@@ -113,8 +113,8 @@ export default function Hero() {
             const rawNormalized = offsetFromCenter / spreadFactor;
             const normalized = Math.max(-1, Math.min(1, rawNormalized));
 
-            // Subtle downward vertical arc: arcY ≈ 0 at center, up to ~24px at sides
-            const arcY = Math.pow(Math.abs(normalized), 1.7) * 24;
+            // Plain horizontal alignment (no vertical arc offset)
+            const arcY = 0;
 
             // 3D Depth calculations for mobile curve
             const rotateY = -Math.max(-24, Math.min(24, normalized * 24));
@@ -125,8 +125,8 @@ export default function Hero() {
             const zIndex = Math.round(100 - Math.abs(normalized) * 50);
             card.style.zIndex = zIndex;
 
-            // Apply 3D transform with arcY
-            card.style.transform = `translate3d(${rawX.toFixed(1)}px, ${arcY.toFixed(1)}px, ${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
+            // Apply 3D transform plain horizontally
+            card.style.transform = `translate3d(${rawX.toFixed(1)}px, 0px, ${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
 
             // Edge fading so off-screen wrapping is 100% invisible
             const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(rawNormalized) * 0.85, 2));
@@ -211,8 +211,11 @@ export default function Hero() {
         <div className="row justify-content-center text-center hero-7-header">
           <div className="col-lg-9 col-xl-8">
             <h1 className="hero-7-title">
-              Turn your online presence into a reason{' '}
-              <span className="hero-title-highlight">customers choose you</span>
+              <span className="hero-title-line line-1">Turn your online presence </span>
+              <span className="hero-title-line line-2">into a reason customers </span>
+              <span className="hero-title-line line-3">
+                <span className="hero-title-highlight">choose you...</span>
+              </span>
             </h1>
             <div className="hero-7-cta-group">
               <Link to="/contact" className="btn btn-hero-7-primary">
@@ -220,7 +223,7 @@ export default function Hero() {
                 <i className="bi bi-arrow-right" aria-hidden="true"></i>
               </Link>
               <Link to="/services" className="btn btn-hero-7-secondary">
-                View My Work
+                View services
               </Link>
             </div>
 

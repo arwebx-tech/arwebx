@@ -5,6 +5,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import FloatingActions from './components/FloatingActions/FloatingActions';
+import QuoteModal from './components/QuoteModal/QuoteModal';
 import useScrollReveal from './hooks/useScrollReveal';
 
 // Lazy Loaded Pages with React.lazy & Suspense
@@ -110,6 +111,7 @@ export default function App() {
 
       <Footer />
       <FloatingActions />
+      <QuoteModal />
     </>
   );
 }

@@ -56,13 +56,13 @@ export default function Navbar() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/services" onClick={closeMobileMenu}>
-                Services
+              <NavLink className="nav-link" to="/about" onClick={closeMobileMenu}>
+                About
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/about" onClick={closeMobileMenu}>
-                About
+              <NavLink className="nav-link" to="/services" onClick={closeMobileMenu}>
+                Services
               </NavLink>
             </li>
             <li className="nav-item">

@@ -9,8 +9,7 @@ export default function Services() {
     <>
       <SEOHead
         title="Web Development Services & Website Creator | ARWEBX"
-        description="Professional website creation services by the best freelancer in Ongole, Hyderabad, and Andhra Pradesh. Business websites, landing pages & web apps."
-        keywords="websites creator, best freelancer in ongole, best freelancer in hyderabad, best freelancer in andhrapradesh, website creator"
+        description="Professional website creation services in Ongole, Hyderabad, and Andhra Pradesh. Custom business websites, landing pages & web applications."
         canonical="https://arwebx.vercel.app/services"
       />
 

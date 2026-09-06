@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`arwebx-navbar navbar navbar-expand-lg ${scrolled ? 'scrolled' : ''}`}
+      className={`arwebx-navbar navbar navbar-expand-xl ${scrolled ? 'scrolled' : ''}`}
       aria-label="Main navigation"
     >
       <div className="container-fluid px-3 px-md-5">

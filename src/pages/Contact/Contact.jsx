@@ -8,8 +8,7 @@ export default function Contact() {
     <>
       <SEOHead
         title="Contact ARWEBX | Freelance Website Creator in Ongole & Hyderabad"
-        description="Hire the best freelancer in Ongole, Hyderabad & Andhra Pradesh. Contact ARWEBX today for custom website creation and web development."
-        keywords="freelancer in ongole, freelancer in hyderabad, freelancer in andhrapradesh, websites creator, contact website creator"
+        description="Get in touch with ARWEBX for freelance website creation and custom web development in Ongole, Hyderabad & Andhra Pradesh."
         canonical="https://arwebx.vercel.app/contact"
       />
 

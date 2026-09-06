@@ -51,9 +51,9 @@
 .hero-7-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
+  font-size: clamp(2rem, 3.8vw, 3.85rem);
   color: var(--color-heading);
-  line-height: 1.15;
+  line-height: 1.18;
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
   display: flex;
@@ -63,6 +63,7 @@
 
 .hero-title-line {
   display: block;
+  white-space: nowrap;
   opacity: 0;
   clip-path: inset(0 100% 0 0);
   transform: translateX(-18px);
@@ -94,6 +95,13 @@
   }
 }
 
+/* Intermediate Laptop Displays (768px to 1199.98px, e.g., 14-inch Laptops) */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .hero-7-title {
+    font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  }
+}
+
 /* Mobile Screens: Disable reveal animation & fix natural text wrapping */
 @media (max-width: 767.98px) {
   .hero-7-title {
@@ -106,6 +114,7 @@
 
   .hero-title-line {
     display: inline;
+    white-space: normal;
     opacity: 1 !important;
     clip-path: none !important;
     transform: none !important;

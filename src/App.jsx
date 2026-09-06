@@ -54,6 +54,12 @@ export default function App() {
   useScrollReveal();
 
   useEffect(() => {
+    // Disable browser's automatic scroll restoration so refresh ALWAYS starts at top (0, 0)
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     let rafId;
 
     const initLenis = () => {
@@ -67,6 +73,9 @@ export default function App() {
 
         lenisRef.current = lenis;
 
+        // Force scroll to absolute top immediately on Lenis init
+        lenis.scrollTo(0, { immediate: true });
+
         function raf(time) {
           lenis.raf(time);
           rafId = requestAnimationFrame(raf);
@@ -78,8 +87,14 @@ export default function App() {
 
     initLenis();
 
-    // Re-check if script loaded async
-    const timer = setTimeout(initLenis, 300);
+    // Re-check if script loaded async and ensure scroll is at 0
+    const timer = setTimeout(() => {
+      initLenis();
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      }
+      window.scrollTo(0, 0);
+    }, 300);
 
     return () => {
       clearTimeout(timer);

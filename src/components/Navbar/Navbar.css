@@ -77,9 +77,13 @@
   transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
   .arwebx-navbar .navbar-toggler {
     display: none !important;
+  }
+
+  .arwebx-navbar .nav-link {
+    padding: 0.5rem 0.85rem !important;
   }
 }
 
@@ -94,8 +98,8 @@
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%230F172A' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-/* Mobile Dropdown Menu */
-@media (max-width: 991.98px) {
+/* Mobile & Laptop Collapsed Dropdown Menu (< 1200px) */
+@media (max-width: 1199.98px) {
   .arwebx-navbar .navbar-collapse {
     position: absolute;
     top: 100%;

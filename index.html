@@ -4,9 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#4F46E5" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
 
-    <!-- Preconnect to Google Fonts -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- Primary SEO -->
+    <title>ARWEBX | Web Developer & Website Creator in Ongole, Hyderabad & Andhra Pradesh</title>
+    <meta
+      name="description"
+      content="ARWEBX creates fast, modern, and conversion-focused websites for businesses, startups, and professionals in Ongole, Hyderabad, Andhra Pradesh, and across India."
+    />
+    <link rel="canonical" href="https://arwebx.vercel.app/" />
+
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -23,52 +36,76 @@
     />
 
     <!-- Lenis Smooth Scroll -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.css" />
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-
-    <!-- Default SEO (overridden per-page by React) -->
-    <title>ARWEBX | Create Modern Websites for Growing Businesses</title>
-    <meta
-      name="description"
-      content="ARWEBX is the best freelance web developer and website creator in Ongole, Hyderabad, and Andhra Pradesh. We build fast, modern, conversion-focused websites and web applications."
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.css"
     />
-    <meta
-      name="keywords"
-      content="best freelancer in ongole, best freelancer in andhrapradesh, best freelancer in hyderabad, freelancer in ongole, freelancer in andhrapradesh, freelancer in hyderabad, websites creator, website creator, web developer ongole, web developer hyderabad, website designer andhra pradesh, ARWEBX"
-    />
-    <link rel="canonical" href="https://arwebx.vercel.app/" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"
+      defer
+    ></script>
 
-    <!-- Open Graph -->
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ARWEBX" />
-    <meta property="og:title" content="ARWEBX | Best Freelancer & Website Creator in Ongole, Hyderabad & Andhra Pradesh" />
+    <meta
+      property="og:title"
+      content="ARWEBX | Web Developer & Website Creator in Ongole, Hyderabad & Andhra Pradesh"
+    />
     <meta
       property="og:description"
-      content="ARWEBX is the best freelance web developer and website creator in Ongole, Hyderabad, and Andhra Pradesh. Fast, modern, conversion-focused websites."
+      content="Modern, fast, and conversion-focused websites for businesses, startups, and professionals in Ongole, Hyderabad, and Andhra Pradesh."
     />
     <meta property="og:url" content="https://arwebx.vercel.app/" />
     <meta property="og:image" content="https://arwebx.vercel.app/og_img.png" />
+    <meta property="og:image:secure_url" content="https://arwebx.vercel.app/og_img.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1201" />
-    <meta property="og:image:height" content="630" /> 
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="ARWEBX - Web Development and Website Creation in Ongole, Hyderabad and Andhra Pradesh"
+    />
+    <meta property="og:locale" content="en_IN" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ARWEBX | Best Freelancer & Website Creator in Ongole, Hyderabad & Andhra Pradesh" />
+    <meta
+      name="twitter:title"
+      content="ARWEBX | Web Developer & Website Creator in Ongole, Hyderabad & Andhra Pradesh"
+    />
     <meta
       name="twitter:description"
-      content="ARWEBX is the best freelance web developer and website creator in Ongole, Hyderabad, and Andhra Pradesh. Fast, modern, conversion-focused websites."
+      content="Modern, fast, and conversion-focused websites for businesses, startups, and professionals in Ongole, Hyderabad, and Andhra Pradesh."
     />
     <meta name="twitter:image" content="https://arwebx.vercel.app/og_img.png" />
+    <meta
+      name="twitter:image:alt"
+      content="ARWEBX Web Development"
+    />
 
-    <!-- Structured Data (Local SEO for Ongole, Hyderabad & Andhra Pradesh) -->
+    <!-- WebSite Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ARWEBX",
+        "url": "https://arwebx.vercel.app/",
+        "description": "ARWEBX creates modern websites and web applications for businesses, startups and professionals in Ongole, Hyderabad, and Andhra Pradesh.",
+        "inLanguage": "en-IN"
+      }
+    </script>
+
+    <!-- Professional Service Schema -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "ARWEBX",
-        "url": "https://arwebx.vercel.app",
+        "url": "https://arwebx.vercel.app/",
         "telephone": "+918332837703",
-        "description": "Best freelance website creator and web developer in Ongole, Hyderabad, and Andhra Pradesh.",
+        "description": "ARWEBX is a freelance web development and website creation service in Ongole, Hyderabad, and Andhra Pradesh, providing custom websites and web applications for businesses and professionals.",
+        "priceRange": "$$",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Ongole",
@@ -77,23 +114,37 @@
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "latitude": "15.5057",
-          "longitude": "80.0499"
+          "latitude": 15.5057,
+          "longitude": 80.0499
         },
         "areaServed": [
-          { "@type": "City", "name": "Ongole" },
-          { "@type": "City", "name": "Hyderabad" },
-          { "@type": "State", "name": "Andhra Pradesh" },
-          { "@type": "Country", "name": "India" }
+          {
+            "@type": "City",
+            "name": "Ongole"
+          },
+          {
+            "@type": "City",
+            "name": "Hyderabad"
+          },
+          {
+            "@type": "State",
+            "name": "Andhra Pradesh"
+          },
+          {
+            "@type": "Country",
+            "name": "India"
+          }
         ],
         "serviceType": [
           "Website Creator",
           "Freelance Web Developer",
+          "Web Development",
+          "Website Design",
           "Business Websites",
           "Landing Pages",
-          "Custom Web Applications"
-        ],
-        "keywords": "best freelancer in ongole, best freelancer in andhrapradesh, best freelancer in hyderabad, freelancer in ongole, freelancer in andhrapradesh, freelancer in hyderabad, websites creator"
+          "Custom Web Applications",
+          "Responsive Website Development"
+        ]
       }
     </script>
   </head>

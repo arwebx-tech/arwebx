@@ -12,9 +12,8 @@ export default function Home() {
   return (
     <>
       <SEOHead
-        title="ARWEBX | Create Modern Websites for Growing Businesses"
-        description="ARWEBX is the best freelance web developer and website creator in Ongole, Hyderabad, and Andhra Pradesh. We build fast, modern, conversion-focused websites and web applications."
-        keywords="best freelancer in ongole, best freelancer in andhrapradesh, best freelancer in hyderabad, freelancer in ongole, freelancer in andhrapradesh, freelancer in hyderabad, websites creator, website creator, web developer ongole, web developer hyderabad"
+        title="ARWEBX | Web Developer & Website Creator in Ongole, Hyderabad & AP"
+        description="ARWEBX provides custom website design, web development, and web application solutions for businesses in Ongole, Hyderabad, and Andhra Pradesh."
         canonical="https://arwebx.vercel.app/"
       />
 

@@ -209,7 +209,7 @@ export default function Hero() {
       <div className="container-fluid px-3 px-md-5">
         {/* Top Centered Header Content */}
         <div className="row justify-content-center text-center hero-7-header">
-          <div className="col-lg-9 col-xl-8">
+          <div className="col-12 col-lg-10 col-xl-9">
             <h1 className="hero-7-title">
               <span className="hero-title-line line-1">Turn your online presence </span>
               <span className="hero-title-line line-2">into a reason customers </span>

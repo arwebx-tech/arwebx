@@ -3,7 +3,7 @@ import SEOHead from '../../components/SEOHead/SEOHead';
 import { getAdminAnalytics } from '../../lib/supabase';
 import './Admin.css';
 
-const DEFAULT_ADMIN_PASSCODE = 'arwebx2026';
+const DEFAULT_ADMIN_PASSCODE = 'Arwebx@0096';
 
 const SQL_SETUP_SCRIPT = `-- Run this script in Supabase SQL Editor (supabase.com -> SQL Editor) to create tables instantly!
 

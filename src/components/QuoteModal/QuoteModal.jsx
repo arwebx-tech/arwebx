@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { saveContactEnquiry } from '../../lib/supabase';
 import './QuoteModal.css';
 
 export default function QuoteModal() {
@@ -54,6 +55,15 @@ export default function QuoteModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+
+    // Save lead into Supabase
+    saveContactEnquiry({
+      firstName: formData.name,
+      lastName: '(Quote Popup)',
+      phone: formData.phone,
+      service: formData.service,
+      message: formData.details || 'Requested Free Quote Popup',
+    });
 
     const text = `Hi ARWEBX! I would like to get a Free Quote.\n\n👤 Name: ${formData.name}\n📞 Phone: ${formData.phone}\n💼 Service: ${formData.service}${formData.details ? `\n📝 Details: ${formData.details}` : ''}`;
     const whatsappUrl = `https://wa.me/918332837703?text=${encodeURIComponent(text)}`;

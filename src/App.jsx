@@ -7,6 +7,7 @@ import Footer from './components/Footer/Footer';
 import FloatingActions from './components/FloatingActions/FloatingActions';
 import QuoteModal from './components/QuoteModal/QuoteModal';
 import useScrollReveal from './hooks/useScrollReveal';
+import usePageView from './hooks/usePageView';
 
 // Lazy Loaded Pages with React.lazy & Suspense
 const Home = lazy(() => import('./pages/Home/Home'));
@@ -14,6 +15,7 @@ const Services = lazy(() => import('./pages/Services/Services'));
 const About = lazy(() => import('./pages/About/About'));
 const Agreement = lazy(() => import('./pages/Agreement/Agreement'));
 const Contact = lazy(() => import('./pages/Contact/Contact'));
+const Admin = lazy(() => import('./pages/Admin/Admin'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 
 // Page loader fallback during suspense lazy component loading
@@ -52,6 +54,7 @@ function ScrollToTop({ lenisRef }) {
 export default function App() {
   const lenisRef = useRef(null);
   useScrollReveal();
+  usePageView();
 
   useEffect(() => {
     // Disable browser's automatic scroll restoration so refresh ALWAYS starts at top (0, 0)
@@ -119,6 +122,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/agreement" element={<Agreement />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

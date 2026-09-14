@@ -65,6 +65,22 @@
   font-weight: 600;
 }
 
+.arwebx-navbar .nav-link-admin {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(79, 70, 229, 0.05);
+}
+
+.arwebx-navbar .nav-link-admin:hover {
+  background: var(--color-primary);
+  color: #FFFFFF !important;
+  border-color: var(--color-primary);
+}
+
 /* Mobile Toggler */
 .arwebx-navbar .navbar-toggler {
   display: inline-flex;

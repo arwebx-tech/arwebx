@@ -70,6 +70,12 @@ export default function Navbar() {
                 Contact
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link nav-link-admin" to="/admin" onClick={closeMobileMenu} title="Admin Login">
+                <i className="bi bi-shield-lock-fill me-1" aria-hidden="true"></i>
+                Admin
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

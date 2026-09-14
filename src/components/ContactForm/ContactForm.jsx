@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { saveContactEnquiry } from '../../lib/supabase';
 import './ContactForm.css';
 
 const SERVICE_OPTIONS = [
@@ -26,9 +27,12 @@ export default function ContactForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
+
+    // Save lead data into Supabase Database asynchronously
+    saveContactEnquiry(formData);
 
     const message = [
       `*New Project Enquiry From Arwebx*`,
@@ -47,7 +51,7 @@ export default function ContactForm() {
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       setStatus('success');
       setFormData(initialFormState);
-    }, 500);
+    }, 400);
   };
 
   if (status === 'success') {

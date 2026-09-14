@@ -29,6 +29,7 @@ export default function Footer() {
               <li><Link to="/services">Services</Link></li>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/contact">Contact</Link></li>
+              <li><Link to="/admin"><i className="bi bi-shield-lock me-1"></i>Admin</Link></li>
             </ul>
           </div>
 
@@ -70,8 +71,12 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
           <p>&copy; {currentYear} ARWEBX. All rights reserved.</p>
-          <div className="footer-legal-links">
+          <div className="footer-legal-links d-flex align-items-center gap-3">
             <Link to="/agreement">Project Terms</Link>
+            <span className="text-muted">•</span>
+            <Link to="/admin" title="Admin Portal" aria-label="Admin Portal">
+              <i className="bi bi-shield-lock me-1"></i>Admin
+            </Link>
           </div>
         </div>
       </div>

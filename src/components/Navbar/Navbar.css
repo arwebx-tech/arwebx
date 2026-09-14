@@ -66,19 +66,14 @@
 }
 
 .arwebx-navbar .nav-link-admin {
-  color: var(--color-primary) !important;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid rgba(79, 70, 229, 0.2);
-  border-radius: var(--radius-sm);
-  background: rgba(79, 70, 229, 0.05);
+  color: var(--color-text);
+  font-size: 1.1rem;
 }
 
-.arwebx-navbar .nav-link-admin:hover {
-  background: var(--color-primary);
-  color: #FFFFFF !important;
-  border-color: var(--color-primary);
+.arwebx-navbar .nav-link-admin:hover,
+.arwebx-navbar .nav-link-admin:focus,
+.arwebx-navbar .nav-link-admin.active {
+  color: var(--color-primary) !important;
 }
 
 /* Mobile Toggler */

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import SEOHead from '../../components/SEOHead/SEOHead';
-import { getAdminAnalytics } from '../../lib/supabase';
+import { getAdminAnalytics, sendPasswordResetEmail, loginAdminWithSupabase } from '../../lib/supabase';
 import './Admin.css';
 
 const DEFAULT_ADMIN_PASSCODE = 'Arwebx@0096';
+const ALLOWED_ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAIL || 'arwebx2@gmail.com')
+  .split(',')
+  .map((e) => e.trim().toLowerCase());
 
 const SQL_SETUP_SCRIPT = `-- Run this script in Supabase SQL Editor (supabase.com -> SQL Editor) to create tables instantly!
 
@@ -31,9 +35,13 @@ CREATE TABLE IF NOT EXISTS public.contact_enquiries (
 ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_enquiries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Allow public insert on page_views" ON public.page_views;
+DROP POLICY IF EXISTS "Allow public select on page_views" ON public.page_views;
+DROP POLICY IF EXISTS "Allow public insert on contact_enquiries" ON public.contact_enquiries;
+DROP POLICY IF EXISTS "Allow public select on contact_enquiries" ON public.contact_enquiries;
+
 CREATE POLICY "Allow public insert on page_views" ON public.page_views FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public select on page_views" ON public.page_views FOR SELECT USING (true);
-
 CREATE POLICY "Allow public insert on contact_enquiries" ON public.contact_enquiries FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public select on contact_enquiries" ON public.contact_enquiries FOR SELECT USING (true);
 `;
@@ -43,8 +51,11 @@ export default function Admin() {
     return sessionStorage.getItem('arwebx_admin_auth') === 'true';
   });
   const [passcode, setPasscode] = useState('');
-  const [passError, setPassError] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState('login'); // login | forgot
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('enquiries'); // enquiries | views | sql
   const [copiedSql, setCopiedSql] = useState(false);
 
@@ -68,14 +79,64 @@ export default function Admin() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (passcode.trim() === DEFAULT_ADMIN_PASSCODE || passcode.trim() === 'admin123') {
+    const inputVal = passcode.trim();
+
+    // Check passcode fallback
+    if (inputVal === DEFAULT_ADMIN_PASSCODE) {
       sessionStorage.setItem('arwebx_admin_auth', 'true');
       setIsAuthenticated(true);
-      setPassError(false);
+      return;
+    }
+
+    // Try Supabase Auth email/pass if email entered
+    if (emailInput.trim()) {
+      setLoading(true);
+      const res = await loginAdminWithSupabase(emailInput.trim(), inputVal);
+      setLoading(false);
+
+      if (res.success) {
+        sessionStorage.setItem('arwebx_admin_auth', 'true');
+        setIsAuthenticated(true);
+        return;
+      }
+    }
+
+    toast.error('Incorrect password');
+  };
+
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+    const trimmedEmail = resetEmail.trim().toLowerCase();
+
+    if (!trimmedEmail) {
+      toast.error('Please enter your registered email address.');
+      return;
+    }
+
+    // 1. Email format syntax check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      toast.error('Please enter a valid email address format.');
+      return;
+    }
+
+    // 2. Admin authorization check: Ensure email is a registered admin email
+    if (ALLOWED_ADMIN_EMAILS.length > 0 && !ALLOWED_ADMIN_EMAILS.includes(trimmedEmail)) {
+      toast.error('This email is not registered as an admin account.');
+      return;
+    }
+
+    setResetLoading(true);
+    const res = await sendPasswordResetEmail(trimmedEmail);
+    setResetLoading(false);
+
+    if (res.success) {
+      toast.success('Password reset link sent to your email! Check your inbox.');
+      setResetEmail('');
     } else {
-      setPassError(true);
+      toast.error(res.error || 'Failed to send reset link.');
     }
   };
 
@@ -87,6 +148,7 @@ export default function Admin() {
   const copySqlToClipboard = () => {
     navigator.clipboard.writeText(SQL_SETUP_SCRIPT);
     setCopiedSql(true);
+    toast.info('SQL script copied to clipboard!');
     setTimeout(() => setCopiedSql(false), 2000);
   };
 
@@ -103,36 +165,111 @@ export default function Admin() {
           <div className="admin-login-card">
             <div className="admin-logo-badge">
               <i className="bi bi-shield-lock-fill"></i>
-              ARWEBX ADMIN
+              ARWEBX ADMIN PANEL
             </div>
-            <h2>Admin Security Login</h2>
-            <p>Enter your secret passcode to access visitor analytics and client enquiries.</p>
 
-            <form onSubmit={handleLogin}>
-              <div className="mb-3">
-                <input
-                  type="password"
-                  className={`form-control form-control-lg text-center ${passError ? 'is-invalid' : ''}`}
-                  placeholder="Enter passcode (e.g. arwebx2026)"
-                  value={passcode}
-                  onChange={(e) => {
-                    setPasscode(e.target.value);
-                    if (passError) setPassError(false);
-                  }}
-                  required
-                />
-                {passError && (
-                  <div className="invalid-feedback">
-                    Incorrect passcode. Please try again.
+            {viewMode === 'login' ? (
+              <>
+                {/* <h2>Admin Security Login</h2> */}
+                {/* <p>Enter your admin credentials to access visitor analytics & enquiries.</p> */}
+
+                <form onSubmit={handleLogin}>
+                  <div className="form-floating-outlined">
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="adminPasswordOutlined"
+                      placeholder=" "
+                      value={passcode}
+                      onChange={(e) => setPasscode(e.target.value)}
+                      required
+                    />
+                    <label htmlFor="adminPasswordOutlined">Enter Password</label>
                   </div>
-                )}
-              </div>
 
-              <button type="submit" className="btn btn-primary btn-lg w-100">
-                Unlock Dashboard
-                <i className="bi bi-arrow-right ms-2"></i>
-              </button>
-            </form>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg w-100"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        Verifying...
+                      </>
+                    ) : (
+                      <>
+                        Login
+                        <i className="bi bi-arrow-right ms-2"></i>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-link btn-sm text-decoration-none text-muted p-0"
+                      onClick={() => setViewMode('forgot')}
+                    >
+                      <i className="bi bi-question-circle me-1"></i>
+                      Forgot Password?
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <>
+                {/* <h2>Forgot Password?</h2> */}
+                {/* <p>Enter your admin email address to receive a secure password reset link.</p> */}
+
+                <form onSubmit={handleForgotPasswordSubmit}>
+                  <div className="form-floating-outlined">
+                    <input
+                      id="resetEmailOutlined"
+                      type="email"
+                      className="form-control"
+                      placeholder=" "
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      required
+                    />
+                    <label htmlFor="resetEmailOutlined">Registered Admin Email</label>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg w-100"
+                    disabled={resetLoading}
+                  >
+                    {resetLoading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        Sending Reset Link...
+                      </>
+                    ) : (
+                      <>
+                        Send Reset Link
+                        <i className="bi bi-send-fill ms-2"></i>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-link btn-sm text-decoration-none text-muted p-0"
+                      onClick={() => {
+                        setViewMode('login');
+                        setResetStatus({ type: '', msg: '' });
+                      }}
+                    >
+                      <i className="bi bi-arrow-left me-1"></i>
+                      Back to Login
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -256,8 +393,8 @@ export default function Admin() {
                 No client enquiries logged yet. Form submissions will appear here automatically!
               </div>
             ) : (
-              analytics.enquiries.map((enquiry) => (
-                <div key={enquiry.id || Math.random()} className="enquiry-row-card">
+              analytics.enquiries.map((enquiry, idx) => (
+                <div key={enquiry.id || idx} className="enquiry-row-card">
                   <div className="enquiry-row-header">
                     <div>
                       <h4 className="enquiry-name">

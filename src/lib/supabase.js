@@ -102,3 +102,75 @@ export async function getAdminAnalytics() {
     };
   }
 }
+
+/**
+ * Send password reset email via Supabase Auth.
+ */
+export async function sendPasswordResetEmail(email) {
+  try {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://arwebx.vercel.app';
+    const redirectTo = `${origin}/admin/reset-password`;
+
+    // First attempt with explicit redirectTo
+    let res = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
+
+    // Fallback attempt without redirectTo options if URL redirect policy was rejected by Supabase Auth
+    if (res.error) {
+      console.warn('Reset with redirectTo error:', res.error.message);
+      res = await supabase.auth.resetPasswordForEmail(email);
+    }
+
+    if (res.error) {
+      console.error('Supabase Auth reset password error:', res.error);
+      let errMsg = res.error.message || 'Failed to send reset email.';
+      if (res.error.message === 'Unable to process request') {
+        errMsg = 'Rate limit reached or Redirect URL not allowed in Supabase Auth config.';
+      }
+      return { success: false, error: errMsg };
+    }
+
+    return { success: true, data: res.data };
+  } catch (err) {
+    console.error('Reset password catch error:', err);
+    return { success: false, error: err.message || 'Network or configuration error.' };
+  }
+}
+
+/**
+ * Update user password using Supabase Auth.
+ */
+export async function updateUserPassword(newPassword) {
+  try {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) {
+      return { success: false, error: error.message || 'Failed to update password.' };
+    }
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err.message || 'Failed to update password.' };
+  }
+}
+
+/**
+ * Login admin with Supabase Auth Email/Password.
+ */
+export async function loginAdminWithSupabase(email, password) {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      return { success: false, error: error.message || 'Invalid login credentials.' };
+    }
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err.message || 'Network or login error.' };
+  }
+}

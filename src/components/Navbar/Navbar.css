@@ -65,18 +65,6 @@
   font-weight: 600;
 }
 
-.arwebx-navbar .nav-link-admin {
-  color: var(--color-text);
-  font-size: 1.1rem;
-}
-
-.arwebx-navbar .nav-link-admin:hover,
-.arwebx-navbar .nav-link-admin:focus,
-.arwebx-navbar .nav-link-admin.active {
-  color: var(--color-primary) !important;
-}
-
-/* Mobile Toggler */
 .arwebx-navbar .navbar-toggler {
   display: inline-flex;
   align-items: center;
@@ -109,7 +97,6 @@
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%230F172A' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-/* Mobile & Laptop Collapsed Dropdown Menu (< 1200px) */
 @media (max-width: 1199.98px) {
   .arwebx-navbar .navbar-collapse {
     position: absolute;

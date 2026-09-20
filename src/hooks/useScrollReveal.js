@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-/**
- * useScrollReveal — Non-blocking, progressive enhancement scroll reveal hook
- * Elements are visible (opacity: 1) by default in CSS.
- * Only off-screen elements below the viewport are temporarily given 'reveal-pending'
- * so they animate in smoothly as the user scrolls.
- */
 export default function useScrollReveal() {
   const { pathname } = useLocation();
 
@@ -18,7 +12,6 @@ export default function useScrollReveal() {
     const elements = Array.from(document.querySelectorAll(selector));
     const vh = window.innerHeight || 800;
 
-    // Only apply reveal-pending to elements strictly below the initial viewport fold
     elements.forEach((el) => {
       const rect = el.getBoundingClientRect();
       if (rect.top > vh * 0.95) {
@@ -56,7 +49,6 @@ export default function useScrollReveal() {
       }
     });
 
-    // Safety fallback: reveal everything after 200ms so content is NEVER hidden
     const timer = setTimeout(() => {
       elements.forEach((el) => {
         el.classList.remove('reveal-pending');

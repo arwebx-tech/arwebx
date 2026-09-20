@@ -1,7 +1,3 @@
-/* ============================================
-   Agreement Page Styles
-   ============================================ */
-
 .agreement-content {
   padding: var(--section-py) 0;
   background: var(--color-bg);
@@ -52,7 +48,6 @@
   margin: 0;
 }
 
-/* CTA */
 .agreement-cta {
   padding: 0 0 var(--section-py-lg);
   background: var(--color-bg);

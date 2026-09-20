@@ -1,7 +1,3 @@
-/* ============================================
-   FloatingActions Component Styles
-   ============================================ */
-
 .floating-actions {
   position: fixed;
   bottom: 3.75rem;
@@ -53,7 +49,6 @@
   box-shadow: 0 6px 24px rgba(79, 70, 229, 0.4);
 }
 
-/* ----- Hover Tooltips ("Call Now" / "Chat on WhatsApp") ----- */
 .floating-tooltip {
   position: absolute;
   right: 100%;
@@ -82,7 +77,6 @@
   transform: translateY(-50%) translateX(0);
 }
 
-/* Pulse animation on WhatsApp */
 .floating-whatsapp::before {
   content: '';
   position: absolute;

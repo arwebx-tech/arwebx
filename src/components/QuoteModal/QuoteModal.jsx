@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { saveContactEnquiry } from '../../lib/supabase';
 import './QuoteModal.css';
@@ -14,7 +14,6 @@ export default function QuoteModal() {
   });
 
   useEffect(() => {
-    // Only enable 40% scroll trigger on Home page ('/')
     if (location.pathname !== '/') return;
 
     let triggered = false;
@@ -32,7 +31,6 @@ export default function QuoteModal() {
       }
     };
 
-    // 400ms delay so browser scroll restoration on refresh doesn't trigger instant popup
     const timer = setTimeout(() => {
       window.addEventListener('scroll', handleScroll, { passive: true });
     }, 400);
@@ -56,7 +54,6 @@ export default function QuoteModal() {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
 
-    // Save lead into Supabase
     saveContactEnquiry({
       firstName: formData.name,
       lastName: '(Quote Popup)',

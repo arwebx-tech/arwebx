@@ -1,13 +1,8 @@
-/* ============================================
-   Contact Page Styles
-   ============================================ */
-
 .contact-body {
   padding: var(--section-py) 0 var(--section-py-lg);
   background: var(--color-bg);
 }
 
-/* Form Card */
 .contact-form-card {
   background: var(--color-bg);
   border: 1px solid var(--color-border);
@@ -29,7 +24,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Info Card */
 .contact-info-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -53,7 +47,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Contact Methods */
 .contact-info-methods {
   display: flex;
   flex-direction: column;
@@ -116,7 +109,6 @@
   color: var(--color-text);
 }
 
-/* Response Time */
 .contact-response {
   display: flex;
   align-items: flex-start;

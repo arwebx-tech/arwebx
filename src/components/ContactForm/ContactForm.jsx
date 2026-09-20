@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { saveContactEnquiry } from '../../lib/supabase';
 import './ContactForm.css';
 
@@ -20,7 +20,7 @@ const initialFormState = {
 
 export default function ContactForm() {
   const [formData, setFormData] = useState(initialFormState);
-  const [status, setStatus] = useState('idle'); // idle | loading | success
+  const [status, setStatus] = useState('idle');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +31,6 @@ export default function ContactForm() {
     e.preventDefault();
     setStatus('loading');
 
-    // Save lead data into Supabase Database asynchronously
     saveContactEnquiry(formData);
 
     const message = [
@@ -76,7 +75,6 @@ export default function ContactForm() {
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
       <div className="row g-3">
-        {/* First Name */}
         <div className="col-md-6">
           <label htmlFor="firstName" className="form-label">
             First Name <span className="text-danger">*</span>
@@ -93,7 +91,6 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Last Name */}
         <div className="col-md-6">
           <label htmlFor="lastName" className="form-label">
             Last Name <span className="text-danger">*</span>
@@ -110,7 +107,6 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Phone */}
         <div className="col-md-6">
           <label htmlFor="phone" className="form-label">
             Phone Number <span className="text-danger">*</span>
@@ -129,7 +125,6 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Service */}
         <div className="col-md-6">
           <label htmlFor="service" className="form-label">
             Service <span className="text-danger">*</span>
@@ -149,7 +144,6 @@ export default function ContactForm() {
           </select>
         </div>
 
-        {/* Message */}
         <div className="col-12">
           <label htmlFor="message" className="form-label">
             Message <span className="text-danger">*</span>
@@ -166,8 +160,7 @@ export default function ContactForm() {
           ></textarea>
         </div>
 
-        {/* Submit */}
-        <div className="col-12">
+        <div className="col-12 d-flex justify-content-end">
           <button
             type="submit"
             className="btn btn-primary btn-submit"

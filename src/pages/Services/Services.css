@@ -1,8 +1,3 @@
-/* ============================================
-   Services Page Styles
-   ============================================ */
-
-/* Detailed Service Sections */
 .service-detail {
   padding: var(--section-py) 0;
 }
@@ -101,7 +96,6 @@
   flex-shrink: 0;
 }
 
-/* CTA */
 .services-cta {
   padding: var(--section-py) 0 var(--section-py-lg);
   background: var(--color-bg);

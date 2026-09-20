@@ -1,4 +1,3 @@
-import React from 'react';
 import './SectionHeading.css';
 
 export default function SectionHeading({ label, title, subtitle, align = 'center' }) {

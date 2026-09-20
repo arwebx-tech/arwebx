@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, lazy, Suspense } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,7 +18,6 @@ const About = lazy(() => import('./pages/About/About'));
 const Agreement = lazy(() => import('./pages/Agreement/Agreement'));
 const Contact = lazy(() => import('./pages/Contact/Contact'));
 const Admin = lazy(() => import('./pages/Admin/Admin'));
-const ResetPassword = lazy(() => import('./pages/Admin/ResetPassword'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 
 // Page loader fallback during suspense lazy component loading
@@ -126,7 +125,6 @@ export default function App() {
             <Route path="/agreement" element={<Agreement />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

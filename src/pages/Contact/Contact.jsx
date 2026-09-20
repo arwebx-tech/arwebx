@@ -1,4 +1,3 @@
-import React from 'react';
 import SEOHead from '../../components/SEOHead/SEOHead';
 import ContactForm from '../../components/ContactForm/ContactForm';
 import './Contact.css';
@@ -7,16 +6,14 @@ export default function Contact() {
   return (
     <>
       <SEOHead
-        title="Contact ARWEBX | Freelance Website Creator in Ongole & Hyderabad"
-        description="Get in touch with ARWEBX for freelance website creation and custom web development in Ongole, Hyderabad & Andhra Pradesh."
+        title="Contact Us | ARWEBX - Modern Websites for Growing Businesses"
+        description="Get in touch with ARWEBX to build a fast, modern website for your growing business. Reach out via WhatsApp or direct phone call."
         canonical="https://arwebx.vercel.app/contact"
       />
 
-      {/* Contact Body */}
       <section className="contact-body" aria-label="Contact form and details">
         <div className="container-fluid px-3 px-md-5">
           <div className="row g-5">
-            {/* Form Column */}
             <div className="col-lg-7">
               <div className="contact-form-card reveal-up">
                 <h2 className="contact-form-title">Project Enquiry</h2>
@@ -27,7 +24,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Info Column */}
             <div className="col-lg-5">
               <div className="contact-info-card reveal-up">
                 <h3 className="contact-info-title">Direct Contact</h3>
@@ -67,7 +63,6 @@ export default function Contact() {
                   </a>
                 </div>
 
-                {/* Response Time */}
                 <div className="contact-response">
                   <i className="bi bi-clock" aria-hidden="true"></i>
                   <p>We typically respond within a few hours during business days.</p>

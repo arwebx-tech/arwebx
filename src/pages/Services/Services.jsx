@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOHead from '../../components/SEOHead/SEOHead';
 import { services } from '../../data/services';
@@ -8,12 +7,11 @@ export default function Services() {
   return (
     <>
       <SEOHead
-        title="Web Development Services & Website Creator | ARWEBX"
-        description="Professional website creation services in Ongole, Hyderabad, and Andhra Pradesh. Custom business websites, landing pages & web applications."
+        title="Services | ARWEBX - Modern Websites for Growing Businesses"
+        description="Explore ARWEBX web services: custom business websites, landing pages, clinic portals, and custom web applications for growing brands."
         canonical="https://arwebx.vercel.app/services"
       />
 
-      {/* Detailed Services */}
       {services.map((service, index) => (
         <section
           className={`service-detail ${index % 2 === 0 ? 'bg-surface' : ''}`}
@@ -59,7 +57,6 @@ export default function Services() {
         </section>
       ))}
 
-      {/* CTA */}
       <section className="services-cta" aria-label="Get started">
         <div className="container text-center reveal-up">
           <h2 className="services-cta-title">Ready to get started?</h2>

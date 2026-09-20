@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import logoImg from '../../assets/logo/logo.png';
 import './Footer.css';
@@ -10,7 +9,6 @@ export default function Footer() {
     <footer className="arwebx-footer" role="contentinfo">
       <div className="container-fluid px-3 px-md-5">
         <div className="row g-4 g-lg-5">
-          {/* Brand Column */}
           <div className="col-lg-4 col-md-6">
             <Link to="/" className="footer-brand">
               <img src={logoImg} alt="ARWEBX Logo" className="footer-logo-img" loading="lazy" />
@@ -21,7 +19,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
           <div className="col-lg-2 col-md-6">
             <h3 className="footer-heading">Pages</h3>
             <ul className="footer-links">
@@ -29,11 +26,10 @@ export default function Footer() {
               <li><Link to="/services">Services</Link></li>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/contact">Contact</Link></li>
-              <li><Link to="/admin"><i className="bi bi-shield-lock me-1"></i>Admin</Link></li>
+              <li><Link to="/admin">Admin</Link></li>
             </ul>
           </div>
 
-          {/* Services */}
           <div className="col-lg-3 col-md-6">
             <h3 className="footer-heading">Services</h3>
             <ul className="footer-links">
@@ -43,7 +39,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div className="col-lg-3 col-md-6">
             <h3 className="footer-heading">Get in Touch</h3>
             <ul className="footer-links footer-contact-links">
@@ -68,15 +63,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
           <p>&copy; {currentYear} ARWEBX. All rights reserved.</p>
           <div className="footer-legal-links d-flex align-items-center gap-3">
             <Link to="/agreement">Project Terms</Link>
-            <span className="text-muted">•</span>
-            <Link to="/admin" title="Admin Portal" aria-label="Admin Portal">
-              <i className="bi bi-shield-lock me-1"></i>Admin
-            </Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import logoImg from '../../assets/logo/logo.png'
+import logoImg from '../../assets/logo/logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -16,7 +16,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setCollapsed(true);
   }, [location.pathname]);
@@ -68,12 +67,6 @@ export default function Navbar() {
             <li className="nav-item">
               <NavLink className="nav-link" to="/contact" onClick={closeMobileMenu}>
                 Contact
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link nav-link-admin" to="/admin" onClick={closeMobileMenu} title="Admin Login" aria-label="Admin Login">
-                <i className="bi bi-shield-lock-fill" aria-hidden="true"></i>
-                Admin
               </NavLink>
             </li>
           </ul>

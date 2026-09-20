@@ -1,14 +1,9 @@
-/* ============================================
-   ARWEBX Secret Admin Dashboard Styles
-   ============================================ */
-
 .admin-page {
   padding: 2.5rem 0 4rem;
   background: var(--color-bg);
   min-height: calc(100vh - 80px);
 }
 
-/* ----- Login Card ----- */
 .admin-login-wrapper {
   display: flex;
   justify-content: center;
@@ -38,21 +33,6 @@
   margin-bottom: 1.25rem;
 }
 
-.admin-login-card h2 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.35rem;
-  color: var(--color-heading);
-  margin-bottom: 0.5rem;
-}
-
-.admin-login-card p {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Outlined Floating Label Input (Animates on Focus / Value) */
 .form-floating-outlined {
   position: relative;
   margin-bottom: 1.5rem;
@@ -78,7 +58,6 @@
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
-/* Default label state: sitting inside the input box like a placeholder */
 .form-floating-outlined label {
   position: absolute;
   top: 50%;
@@ -95,7 +74,6 @@
   line-height: 1;
 }
 
-/* Floated label state: Moves up to top border notch when focused OR when text is typed */
 .form-floating-outlined .form-control:focus ~ label,
 .form-floating-outlined .form-control:not(:placeholder-shown) ~ label {
   top: -10px;
@@ -106,83 +84,6 @@
   color: var(--color-primary, #4f46e5);
 }
 
-/* ----- Custom Toast Notification ----- */
-.toast-container-fixed {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: none;
-}
-
-.custom-toast {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 280px;
-  max-width: 420px;
-  padding: 12px 18px;
-  border-radius: var(--radius-md, 10px);
-  background: #0f172a;
-  color: #ffffff;
-  font-size: 0.9rem;
-  font-weight: 500;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  animation: toastSlideIn 0.3s ease-out forwards;
-}
-
-.custom-toast.toast-error {
-  border-left: 4px solid #ef4444;
-}
-
-.custom-toast.toast-error .toast-icon {
-  color: #ef4444;
-  font-size: 1.25rem;
-}
-
-.custom-toast.toast-success {
-  border-left: 4px solid #10b981;
-}
-
-.custom-toast.toast-success .toast-icon {
-  color: #10b981;
-  font-size: 1.25rem;
-}
-
-.toast-close-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  padding: 2px 4px;
-  margin-left: auto;
-  font-size: 0.85rem;
-  transition: color 0.15s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.toast-close-btn:hover {
-  color: #ffffff;
-}
-
-@keyframes toastSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* ----- Dashboard Header ----- */
 .admin-header {
   display: flex;
   flex-wrap: wrap;
@@ -214,7 +115,6 @@
   gap: 0.75rem;
 }
 
-/* ----- Stat Cards Grid ----- */
 .admin-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -290,7 +190,6 @@
   margin-top: 4px;
 }
 
-/* ----- Content Tabs & Tables ----- */
 .admin-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -309,12 +208,15 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.admin-card-header h3 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: var(--color-heading);
-  margin: 0;
+@keyframes cascadeFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .enquiry-row-card {
@@ -323,7 +225,8 @@
   border-radius: var(--radius-md);
   padding: 1.25rem;
   margin-bottom: 1rem;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+  animation: cascadeFadeIn 0.4s ease backwards;
 }
 
 .enquiry-row-card:hover {

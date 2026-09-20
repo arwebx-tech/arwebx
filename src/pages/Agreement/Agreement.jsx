@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOHead from '../../components/SEOHead/SEOHead';
 import './Agreement.css';
@@ -75,12 +74,11 @@ export default function Agreement() {
   return (
     <>
       <SEOHead
-        title="Freelance Web Development Agreement | ARWEBX"
-        description="Review the ARWEBX freelance web development project working terms covering scope, payment, revisions, intellectual property, and more."
+        title="Project Terms | ARWEBX - Modern Websites for Growing Businesses"
+        description="Review the ARWEBX web development project working terms covering project scope, milestones, revisions, intellectual property, and delivery."
         canonical="https://arwebx.vercel.app/agreement"
       />
 
-      {/* Agreement Content */}
       <section className="agreement-content" aria-label="Agreement sections">
         <div className="container-fluid px-3 px-md-5">
           <div className="row justify-content-center">
@@ -103,7 +101,6 @@ export default function Agreement() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="agreement-cta" aria-label="Discuss your project">
         <div className="container-fluid px-3 px-md-5 text-center reveal-up">
           <h2 className="agreement-cta-title">Ready to discuss your project?</h2>

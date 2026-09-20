@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import SEOHead from '../../components/SEOHead/SEOHead';
-import { getAdminAnalytics, sendPasswordResetEmail, loginAdminWithSupabase } from '../../lib/supabase';
+import { getAdminAnalytics } from '../../lib/supabase';
 import './Admin.css';
 
 const DEFAULT_ADMIN_PASSCODE = 'Arwebx@0096';
-const ALLOWED_ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAIL || 'arwebx2@gmail.com')
-  .split(',')
-  .map((e) => e.trim().toLowerCase());
 
 const SQL_SETUP_SCRIPT = `-- Run this script in Supabase SQL Editor (supabase.com -> SQL Editor) to create tables instantly!
 
@@ -46,17 +43,52 @@ CREATE POLICY "Allow public insert on contact_enquiries" ON public.contact_enqui
 CREATE POLICY "Allow public select on contact_enquiries" ON public.contact_enquiries FOR SELECT USING (true);
 `;
 
+function CountUp({ end = 0, duration = 1200 }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const endVal = Number(end) || 0;
+    if (endVal === 0) {
+      setCount(0);
+      return;
+    }
+
+    let startTime = null;
+    let frameId;
+    const animDuration = Math.min(duration, Math.max(600, endVal * 70));
+
+    const tick = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / animDuration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(ease * endVal);
+
+      setCount(current);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick);
+      } else {
+        setCount(endVal);
+      }
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId);
+    };
+  }, [end, duration]);
+
+  return <span>{count.toLocaleString()}</span>;
+}
+
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem('arwebx_admin_auth') === 'true';
   });
   const [passcode, setPasscode] = useState('');
-  const [emailInput, setEmailInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [viewMode, setViewMode] = useState('login'); // login | forgot
-  const [resetEmail, setResetEmail] = useState('');
-  const [resetLoading, setResetLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('enquiries'); // enquiries | views | sql
+  const [activeTab, setActiveTab] = useState('enquiries');
   const [copiedSql, setCopiedSql] = useState(false);
 
   const [analytics, setAnalytics] = useState({
@@ -79,65 +111,19 @@ export default function Admin() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     const inputVal = passcode.trim();
 
-    // Check passcode fallback
     if (inputVal === DEFAULT_ADMIN_PASSCODE) {
       sessionStorage.setItem('arwebx_admin_auth', 'true');
+      localStorage.setItem('arwebx_is_admin', 'true');
       setIsAuthenticated(true);
+      toast.success('Welcome to ARWEBX Arunchand!');
       return;
-    }
-
-    // Try Supabase Auth email/pass if email entered
-    if (emailInput.trim()) {
-      setLoading(true);
-      const res = await loginAdminWithSupabase(emailInput.trim(), inputVal);
-      setLoading(false);
-
-      if (res.success) {
-        sessionStorage.setItem('arwebx_admin_auth', 'true');
-        setIsAuthenticated(true);
-        return;
-      }
     }
 
     toast.error('Incorrect password');
-  };
-
-  const handleForgotPasswordSubmit = async (e) => {
-    e.preventDefault();
-    const trimmedEmail = resetEmail.trim().toLowerCase();
-
-    if (!trimmedEmail) {
-      toast.error('Please enter your registered email address.');
-      return;
-    }
-
-    // 1. Email format syntax check
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmedEmail)) {
-      toast.error('Please enter a valid email address format.');
-      return;
-    }
-
-    // 2. Admin authorization check: Ensure email is a registered admin email
-    if (ALLOWED_ADMIN_EMAILS.length > 0 && !ALLOWED_ADMIN_EMAILS.includes(trimmedEmail)) {
-      toast.error('This email is not registered as an admin account.');
-      return;
-    }
-
-    setResetLoading(true);
-    const res = await sendPasswordResetEmail(trimmedEmail);
-    setResetLoading(false);
-
-    if (res.success) {
-      toast.success('Password reset link sent to your email! Check your inbox.');
-      setResetEmail('');
-    } else {
-      toast.error(res.error || 'Failed to send reset link.');
-    }
   };
 
   const handleLogout = () => {
@@ -165,111 +151,41 @@ export default function Admin() {
           <div className="admin-login-card">
             <div className="admin-logo-badge">
               <i className="bi bi-shield-lock-fill"></i>
-              ARWEBX ADMIN PANEL
+              ADMIN LOGIN
             </div>
 
-            {viewMode === 'login' ? (
-              <>
-                {/* <h2>Admin Security Login</h2> */}
-                {/* <p>Enter your admin credentials to access visitor analytics & enquiries.</p> */}
+            <form onSubmit={handleLogin}>
+              <div className="form-floating-outlined">
+                <input
+                  type="password"
+                  className="form-control"
+                  id="adminPasswordOutlined"
+                  placeholder=" "
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
+                  required
+                />
+                <label htmlFor="adminPasswordOutlined">Enter Password</label>
+              </div>
 
-                <form onSubmit={handleLogin}>
-                  <div className="form-floating-outlined">
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="adminPasswordOutlined"
-                      placeholder=" "
-                      value={passcode}
-                      onChange={(e) => setPasscode(e.target.value)}
-                      required
-                    />
-                    <label htmlFor="adminPasswordOutlined">Enter Password</label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-lg w-100"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Verifying...
-                      </>
-                    ) : (
-                      <>
-                        Login
-                        <i className="bi bi-arrow-right ms-2"></i>
-                      </>
-                    )}
-                  </button>
-
-                  <div className="mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-link btn-sm text-decoration-none text-muted p-0"
-                      onClick={() => setViewMode('forgot')}
-                    >
-                      <i className="bi bi-question-circle me-1"></i>
-                      Forgot Password?
-                    </button>
-                  </div>
-                </form>
-              </>
-            ) : (
-              <>
-                {/* <h2>Forgot Password?</h2> */}
-                {/* <p>Enter your admin email address to receive a secure password reset link.</p> */}
-
-                <form onSubmit={handleForgotPasswordSubmit}>
-                  <div className="form-floating-outlined">
-                    <input
-                      id="resetEmailOutlined"
-                      type="email"
-                      className="form-control"
-                      placeholder=" "
-                      value={resetEmail}
-                      onChange={(e) => setResetEmail(e.target.value)}
-                      required
-                    />
-                    <label htmlFor="resetEmailOutlined">Registered Admin Email</label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-lg w-100"
-                    disabled={resetLoading}
-                  >
-                    {resetLoading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Sending Reset Link...
-                      </>
-                    ) : (
-                      <>
-                        Send Reset Link
-                        <i className="bi bi-send-fill ms-2"></i>
-                      </>
-                    )}
-                  </button>
-
-                  <div className="mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-link btn-sm text-decoration-none text-muted p-0"
-                      onClick={() => {
-                        setViewMode('login');
-                        setResetStatus({ type: '', msg: '' });
-                      }}
-                    >
-                      <i className="bi bi-arrow-left me-1"></i>
-                      Back to Login
-                    </button>
-                  </div>
-                </form>
-              </>
-            )}
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg w-100"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Verifying...
+                  </>
+                ) : (
+                  <>
+                    Login
+                    <i className="bi bi-arrow-right ms-2"></i>
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -284,14 +200,13 @@ export default function Admin() {
         canonical="https://arwebx.vercel.app/admin"
       />
 
-      {/* Header */}
       <div className="admin-header">
         <div className="admin-title-group">
           <h1>
             <i className="bi bi-speedometer2 me-2 text-primary"></i>
-            ARWEBX Analytics & Leads
+            Analytics & Leads
           </h1>
-          <p>Live website traffic metrics and client enquiry history</p>
+          <p>Live website traffic metrics & client enquiry history</p>
         </div>
 
         <div className="admin-header-actions">
@@ -311,14 +226,15 @@ export default function Admin() {
         </div>
       </div>
 
-      {/* Stat Cards Grid */}
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
           <div className="admin-stat-icon icon-blue">
             <i className="bi bi-eye-fill"></i>
           </div>
           <div className="admin-stat-info">
-            <span className="admin-stat-value">{analytics.totalViews}</span>
+            <span className="admin-stat-value">
+              <CountUp end={analytics.totalViews} />
+            </span>
             <span className="admin-stat-label">Total Page Views</span>
           </div>
         </div>
@@ -328,7 +244,9 @@ export default function Admin() {
             <i className="bi bi-person-check-fill"></i>
           </div>
           <div className="admin-stat-info">
-            <span className="admin-stat-value">{analytics.todayViews}</span>
+            <span className="admin-stat-value">
+              <CountUp end={analytics.todayViews} />
+            </span>
             <span className="admin-stat-label">Today's Visitors</span>
           </div>
         </div>
@@ -338,7 +256,9 @@ export default function Admin() {
             <i className="bi bi-chat-left-quote-fill"></i>
           </div>
           <div className="admin-stat-info">
-            <span className="admin-stat-value">{analytics.enquiries.length}</span>
+            <span className="admin-stat-value">
+              <CountUp end={analytics.enquiries.length} />
+            </span>
             <span className="admin-stat-label">Total Client Enquiries</span>
           </div>
         </div>
@@ -354,7 +274,6 @@ export default function Admin() {
         </div>
       </div>
 
-      {/* Main Content & Tabs */}
       <div className="admin-card">
         <div className="admin-card-header">
           <div className="btn-group">
@@ -363,7 +282,7 @@ export default function Admin() {
               onClick={() => setActiveTab('enquiries')}
             >
               <i className="bi bi-envelope-fill me-1"></i>
-              Client Leads ({analytics.enquiries.length})
+              Client Leads (<CountUp end={analytics.enquiries.length} duration={600} />)
             </button>
 
             <button
@@ -384,7 +303,6 @@ export default function Admin() {
           </div>
         </div>
 
-        {/* Tab 1: Client Enquiries */}
         {activeTab === 'enquiries' && (
           <div>
             {analytics.enquiries.length === 0 ? (
@@ -394,7 +312,11 @@ export default function Admin() {
               </div>
             ) : (
               analytics.enquiries.map((enquiry, idx) => (
-                <div key={enquiry.id || idx} className="enquiry-row-card">
+                <div
+                  key={enquiry.id || idx}
+                  className="enquiry-row-card"
+                  style={{ animationDelay: `${idx * 120}ms` }}
+                >
                   <div className="enquiry-row-header">
                     <div>
                       <h4 className="enquiry-name">
@@ -416,23 +338,32 @@ export default function Admin() {
                   </div>
 
                   <div className="enquiry-actions">
-                    <a
-                      href={`tel:${enquiry.phone}`}
-                      className="btn-enquiry-call"
-                    >
-                      <i className="bi bi-telephone-fill"></i>
-                      Call {enquiry.phone}
-                    </a>
+                    {/\d{5,}/.test(enquiry.phone) ? (
+                      <>
+                        <a
+                          href={`tel:${enquiry.phone}`}
+                          className="btn-enquiry-call"
+                        >
+                          <i className="bi bi-telephone-fill"></i>
+                          Call {enquiry.phone}
+                        </a>
 
-                    <a
-                      href={`https://wa.me/${enquiry.phone.replace(/[^0-9]/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-enquiry-wa"
-                    >
-                      <i className="bi bi-whatsapp"></i>
-                      WhatsApp Client
-                    </a>
+                        <a
+                          href={`https://wa.me/${enquiry.phone.replace(/[^0-9]/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-enquiry-wa"
+                        >
+                          <i className="bi bi-whatsapp"></i>
+                          WhatsApp Client
+                        </a>
+                      </>
+                    ) : (
+                      <span className="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                        <i className="bi bi-whatsapp me-1"></i>
+                        {enquiry.phone || 'Initiated via Floating Widget'}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))
@@ -440,7 +371,6 @@ export default function Admin() {
           </div>
         )}
 
-        {/* Tab 2: Recent Views */}
         {activeTab === 'views' && (
           <div className="table-responsive">
             <table className="table table-hover align-middle">
@@ -476,7 +406,6 @@ export default function Admin() {
           </div>
         )}
 
-        {/* Tab 3: SQL Setup Script */}
         {activeTab === 'sql' && (
           <div>
             <div className="d-flex justify-content-between align-items-center mb-3">

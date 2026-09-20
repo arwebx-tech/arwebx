@@ -54,12 +54,6 @@
   cursor: not-allowed;
 }
 
-.contact-form .invalid-feedback {
-  font-size: 0.8125rem;
-  margin-top: 0.25rem;
-}
-
-/* Success State */
 .contact-form-success {
   text-align: center;
   padding: 3rem 2rem;

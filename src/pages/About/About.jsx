@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOHead from '../../components/SEOHead/SEOHead';
 import SectionHeading from '../../components/SectionHeading/SectionHeading';
@@ -41,12 +40,11 @@ export default function About() {
   return (
     <>
       <SEOHead
-        title="About ARWEBX | Web Developer & Website Creator in Ongole, Hyderabad & AP"
-        description="Learn about ARWEBX — providing freelance web development and website creation services for clients in Ongole, Hyderabad, Andhra Pradesh, and beyond."
+        title="About Us | ARWEBX - Modern Websites for Growing Businesses"
+        description="Learn about ARWEBX — a modern web development studio crafting fast, high-performance websites engineered for growing businesses."
         canonical="https://arwebx.vercel.app/about"
       />
 
-      {/* Story Section */}
       <section className="about-story" aria-label="Our approach">
         <div className="container-fluid px-3 px-md-5">
           <div className="row justify-content-center">
@@ -75,7 +73,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values Section */}
       <section className="about-values" aria-label="Our values">
         <div className="container-fluid px-3 px-md-5">
           <div className="reveal-up">
@@ -100,7 +97,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="about-cta" aria-label="Get in touch">
         <div className="container-fluid px-3 px-md-5 text-center reveal-up">
           <h2 className="about-cta-title">Let's work together</h2>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOHead from '../../components/SEOHead/SEOHead';
 import Hero from '../../components/Hero/Hero';
@@ -12,15 +11,13 @@ export default function Home() {
   return (
     <>
       <SEOHead
-        title="ARWEBX | Web Developer & Website Creator in Ongole, Hyderabad & AP"
-        description="ARWEBX provides custom website design, web development, and web application solutions for businesses in Ongole, Hyderabad, and Andhra Pradesh."
+        title="ARWEBX | Fast, Modern Websites for Growing Businesses"
+        description="Transform your online presence with ARWEBX. We design lightning-fast, mobile-first, and conversion-focused websites engineered to drive business growth."
         canonical="https://arwebx.vercel.app/"
       />
 
-      {/* Hero Section */}
       <Hero />
 
-      {/* Services Section */}
       <section className="home-services" id="services" aria-labelledby="services-heading">
         <div className="container-fluid px-3 px-md-5">
           <div className="services-section-header reveal-up">
@@ -44,7 +41,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why ARWEBX Section */}
       <section className="home-why" aria-labelledby="why-heading">
         <div className="container-fluid px-3 px-md-5">
           <div className="reveal-up">
@@ -100,7 +96,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Process Section */}
       <section className="home-process" aria-labelledby="process-heading">
         <div className="container-fluid px-3 px-md-5">
           <div className="reveal-up">
@@ -113,7 +108,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="home-cta" aria-label="Call to action">
         <div className="container">
           <div className="cta-card reveal-up">

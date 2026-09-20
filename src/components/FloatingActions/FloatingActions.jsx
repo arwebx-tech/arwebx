@@ -1,7 +1,13 @@
-import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './FloatingActions.css';
 
 export default function FloatingActions() {
+  const location = useLocation();
+
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <div className="floating-actions" role="complementary" aria-label="Quick contact">
       <a
@@ -13,7 +19,7 @@ export default function FloatingActions() {
         <i className="bi bi-telephone-fill" aria-hidden="true"></i>
       </a>
       <a
-        href="https://wa.me/918332837703"
+        href={`https://wa.me/918332837703?text=${encodeURIComponent('Hi ARWEBX! I visited your website and I am interested in getting a website built for my business. Can we discuss?')}`}
         target="_blank"
         rel="noopener noreferrer"
         className="floating-btn floating-whatsapp"

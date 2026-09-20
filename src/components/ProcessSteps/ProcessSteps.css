@@ -1,7 +1,3 @@
-/* ============================================
-   ProcessSteps Component Styles
-   ============================================ */
-
 .process-steps {
   position: relative;
 }
@@ -65,7 +61,6 @@
   margin: 0;
 }
 
-/* Timeline connector line (desktop) */
 @media (min-width: 992px) {
   .process-timeline {
     position: absolute;

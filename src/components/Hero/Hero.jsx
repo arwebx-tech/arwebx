@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
 import clinicImg from '../../assets/images/clinic.jpg';
@@ -47,7 +47,6 @@ const CAROUSEL_ITEMS = [
   },
 ];
 
-// Create a larger array of items for seamless off-screen looping
 const DISPLAY_ITEMS = [...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS];
 
 export default function Hero() {
@@ -71,7 +70,6 @@ export default function Hero() {
         const containerWidth = container.offsetWidth || 1200;
         const isMobile = containerWidth < 768;
 
-        // Dynamic animation speed: smartphone (0.032 - 0.035) vs desktop/tablet (0.045)
         const speed = isMobile
           ? (containerWidth < 431 ? 0.032 : 0.035)
           : 0.045;
@@ -79,13 +77,8 @@ export default function Hero() {
         offsetRef.current += delta * speed;
 
         if (isMobile) {
-          // ==========================================
-          // SMARTPHONE-ONLY 3D CURVE IMPLEMENTATION
-          // ==========================================
-          // Use offsetWidth to get true unscaled layout width (prevents scale jitter)
           const actualCardWidth = cards[0]?.offsetWidth || 160;
 
-          // Responsive smartphone spacing factor (0.68 to 0.72 * actual card width)
           let spacingFactor = 0.72;
           if (containerWidth < 360) {
             spacingFactor = 0.68;
@@ -113,26 +106,18 @@ export default function Hero() {
             const rawNormalized = offsetFromCenter / spreadFactor;
             const normalized = Math.max(-1, Math.min(1, rawNormalized));
 
-            // Plain horizontal alignment (no vertical arc offset)
-            const arcY = 0;
-
-            // 3D Depth calculations for mobile curve
             const rotateY = -Math.max(-24, Math.min(24, normalized * 24));
             const translateZ = -Math.pow(Math.min(1.2, Math.abs(normalized)), 1.7) * 70;
             const scale = Math.max(0.88, 1 - Math.min(1, Math.abs(normalized)) * 0.12);
 
-            // Stacking order: center card highest z-index, side cards lower
             const zIndex = Math.round(100 - Math.abs(normalized) * 50);
             card.style.zIndex = zIndex;
 
-            // Apply 3D transform plain horizontally
             card.style.transform = `translate3d(${rawX.toFixed(1)}px, 0px, ${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
 
-            // Edge fading so off-screen wrapping is 100% invisible
             const edgeFade = Math.max(0, 1 - Math.pow(Math.abs(rawNormalized) * 0.85, 2));
             card.style.opacity = edgeFade.toFixed(2);
 
-            // Laser reveal math
             const laserX = containerWidth / 2;
             const cardLeft = rawX;
             const cutDist = laserX - cardLeft;
@@ -145,9 +130,6 @@ export default function Hero() {
             }
           });
         } else {
-          // ==========================================
-          // DESKTOP & TABLET IMPLEMENTATION (UNCHANGED)
-          // ==========================================
           const cardWidth = 320;
           const gap = 24;
           const totalUnitWidth = cardWidth + gap;
@@ -202,12 +184,10 @@ export default function Hero() {
 
   return (
     <section className="hero-section hero-7-official" aria-label="Hero">
-      {/* Background Particles & Glow */}
       <div className="hero-glow hero-glow-primary" aria-hidden="true"></div>
       <div className="hero-glow hero-glow-secondary" aria-hidden="true"></div>
 
       <div className="container-fluid px-3 px-md-5">
-        {/* Top Centered Header Content */}
         <div className="row justify-content-center text-center hero-7-header">
           <div className="col-12 col-lg-10 col-xl-9">
             <h1 className="hero-7-title">
@@ -227,7 +207,6 @@ export default function Hero() {
               </Link>
             </div>
 
-            {/* Feature Highlights Row */}
             <div className="hero-highlights">
               <div className="highlight-item">
                 <i className="bi bi-check-circle-fill icon-check" aria-hidden="true"></i>
@@ -245,23 +224,19 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Hero 7 Official 3D Arc Carousel Track */}
         <div
           className="hero-7-carousel-wrapper"
           aria-hidden="true"
         >
-          {/* Vertical Central Glowing Laser Line */}
           <div className="hero-7-laser">
             <div className="laser-beam-core"></div>
             <div className="laser-beam-flare"></div>
           </div>
 
-          {/* 3D Curved Track */}
           <div className="hero-7-track" ref={containerRef}>
             {DISPLAY_ITEMS.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="hero-7-card">
                 <div className="hero-7-card-inner">
-                  {/* Base Layer: Grayscale / B&W */}
                   <div className="card-layer layer-grayscale">
                     <img
                       src={item.img}
@@ -275,7 +250,6 @@ export default function Hero() {
                     </div>
                   </div>
 
-                  {/* Overlay Layer: Full Color (dynamically clipped by laser position) */}
                   <div className="card-layer layer-color">
                     <img
                       src={item.img}

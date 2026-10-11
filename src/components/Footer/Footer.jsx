@@ -23,8 +23,8 @@ export default function Footer() {
             <h3 className="footer-heading">Pages</h3>
             <ul className="footer-links">
               <li><Link to="/">Home</Link></li>
-              <li><Link to="/services">Services</Link></li>
               <li><Link to="/about">About</Link></li>
+              <li><Link to="/services">Services</Link></li>
               <li><Link to="/contact">Contact</Link></li>
               <li><Link to="/admin">Admin</Link></li>
             </ul>
@@ -36,6 +36,7 @@ export default function Footer() {
               <li><Link to="/services">Business Websites</Link></li>
               <li><Link to="/services">Landing Pages</Link></li>
               <li><Link to="/services">Custom Web Apps</Link></li>
+              <li><Link to="/services">Clinic Websites</Link></li>
             </ul>
           </div>
 

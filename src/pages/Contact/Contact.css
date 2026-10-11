@@ -111,9 +111,9 @@
 
 .contact-response {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.625rem;
-  padding: 1rem;
+  padding: 0.875rem 1rem;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -123,14 +123,17 @@
   color: var(--color-secondary);
   font-size: 1.125rem;
   flex-shrink: 0;
-  margin-top: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .contact-response p {
   font-size: 0.875rem;
   color: var(--color-text);
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 @media (max-width: 991.98px) {

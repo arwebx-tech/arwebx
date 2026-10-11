@@ -88,3 +88,40 @@ export async function getAdminAnalytics() {
     };
   }
 }
+
+export async function updateContactEnquiry(id, updates) {
+  try {
+    const { data, error } = await supabase
+      .from('contact_enquiries')
+      .update(updates)
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      console.error('Error updating enquiry in Supabase:', error);
+      return { success: false, error };
+    }
+    return { success: true, data };
+  } catch (err) {
+    console.error('Update enquiry catch error:', err);
+    return { success: false, error: err };
+  }
+}
+
+export async function deleteContactEnquiry(id) {
+  try {
+    const { error } = await supabase
+      .from('contact_enquiries')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting enquiry from Supabase:', error);
+      return { success: false, error };
+    }
+    return { success: true };
+  } catch (err) {
+    console.error('Delete enquiry catch error:', err);
+    return { success: false, error: err };
+  }
+}

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import SEOHead from '../../components/SEOHead/SEOHead';
-import { getAdminAnalytics } from '../../lib/supabase';
+import { getAdminAnalytics, updateContactEnquiry, deleteContactEnquiry } from '../../lib/supabase';
 import './Admin.css';
 
-const DEFAULT_ADMIN_PASSCODE = 'Arwebx@0096';
+const DEFAULT_ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || 'Arwebx@0096';
 
 const SQL_SETUP_SCRIPT = `-- Run this script in Supabase SQL Editor (supabase.com -> SQL Editor) to create tables instantly!
 
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.page_views (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- 2. Create contact_enquiries table
+-- 2. Create contact_enquiries table (includes status column)
 CREATE TABLE IF NOT EXISTS public.contact_enquiries (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   first_name TEXT NOT NULL,
@@ -25,10 +25,11 @@ CREATE TABLE IF NOT EXISTS public.contact_enquiries (
   phone TEXT NOT NULL,
   service TEXT,
   message TEXT,
+  status TEXT DEFAULT 'Pending',
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- 3. Enable RLS and create public insert policy
+-- 3. Enable RLS and create public policies
 ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_enquiries ENABLE ROW LEVEL SECURITY;
 
@@ -36,11 +37,15 @@ DROP POLICY IF EXISTS "Allow public insert on page_views" ON public.page_views;
 DROP POLICY IF EXISTS "Allow public select on page_views" ON public.page_views;
 DROP POLICY IF EXISTS "Allow public insert on contact_enquiries" ON public.contact_enquiries;
 DROP POLICY IF EXISTS "Allow public select on contact_enquiries" ON public.contact_enquiries;
+DROP POLICY IF EXISTS "Allow public update on contact_enquiries" ON public.contact_enquiries;
+DROP POLICY IF EXISTS "Allow public delete on contact_enquiries" ON public.contact_enquiries;
 
 CREATE POLICY "Allow public insert on page_views" ON public.page_views FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public select on page_views" ON public.page_views FOR SELECT USING (true);
 CREATE POLICY "Allow public insert on contact_enquiries" ON public.contact_enquiries FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public select on contact_enquiries" ON public.contact_enquiries FOR SELECT USING (true);
+CREATE POLICY "Allow public update on contact_enquiries" ON public.contact_enquiries FOR UPDATE USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public delete on contact_enquiries" ON public.contact_enquiries FOR DELETE USING (true);
 `;
 
 function CountUp({ end = 0, duration = 1200 }) {
@@ -87,6 +92,7 @@ export default function Admin() {
     return sessionStorage.getItem('arwebx_admin_auth') === 'true';
   });
   const [passcode, setPasscode] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('enquiries');
   const [copiedSql, setCopiedSql] = useState(false);
@@ -98,16 +104,45 @@ export default function Admin() {
     recentViews: [],
   });
 
-  const loadData = async () => {
-    setLoading(true);
-    const data = await getAdminAnalytics();
-    setAnalytics(data);
-    setLoading(false);
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [editingEnquiry, setEditingEnquiry] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState(null);
+
+  const loadData = async (silent = true) => {
+    if (!silent) setIsRefreshing(true);
+    else setLoading(true);
+
+    try {
+      const startTime = Date.now();
+      const data = await getAdminAnalytics();
+
+      // Ensure smooth visible animation for manual clicks
+      if (!silent) {
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 400) {
+          await new Promise((resolve) => setTimeout(resolve, 400 - elapsed));
+        }
+      }
+
+      setAnalytics(data);
+      setLastRefreshed(new Date());
+    } catch (err) {
+      console.error('Refresh error:', err);
+      if (!silent) {
+        toast.error('Failed to refresh data. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadData();
+      loadData(true);
     }
   }, [isAuthenticated]);
 
@@ -118,17 +153,114 @@ export default function Admin() {
     if (inputVal === DEFAULT_ADMIN_PASSCODE) {
       sessionStorage.setItem('arwebx_admin_auth', 'true');
       localStorage.setItem('arwebx_is_admin', 'true');
+      setPasscode('');
+      setShowPassword(false);
       setIsAuthenticated(true);
       toast.success('Welcome to ARWEBX Arunchand!');
       return;
     }
 
+    setPasscode('');
+    setShowPassword(false);
     toast.error('Incorrect password');
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem('arwebx_admin_auth');
+    localStorage.removeItem('arwebx_is_admin');
+    setPasscode('');
+    setShowPassword(false);
+    setAnalytics({
+      totalViews: 0,
+      todayViews: 0,
+      enquiries: [],
+      recentViews: [],
+    });
+    setEditingEnquiry(null);
     setIsAuthenticated(false);
+    toast.info('Logged out successfully');
+  };
+
+  const handleStatusChange = async (id, newStatus, currentStatus) => {
+    if (currentStatus && newStatus === currentStatus) return;
+
+    setAnalytics((prev) => ({
+      ...prev,
+      enquiries: prev.enquiries.map((item) =>
+        item.id === id ? { ...item, status: newStatus } : item
+      ),
+    }));
+
+    const res = await updateContactEnquiry(id, { status: newStatus });
+    if (!res.success) {
+      toast.error('Failed to update status in Supabase');
+      loadData();
+    }
+  };
+
+  const handleOpenEdit = (enquiry) => {
+    setEditingEnquiry({
+      id: enquiry.id,
+      first_name: enquiry.first_name || '',
+      last_name: enquiry.last_name || '',
+      phone: enquiry.phone || '',
+      service: enquiry.service || 'Business Website',
+      status: enquiry.status || 'Pending',
+      message: enquiry.message || '',
+    });
+  };
+
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    if (!editingEnquiry) return;
+    setIsSavingEdit(true);
+
+    const { id, first_name, last_name, phone, service, status, message } = editingEnquiry;
+    const res = await updateContactEnquiry(id, {
+      first_name,
+      last_name,
+      phone,
+      service,
+      status,
+      message,
+    });
+
+    setIsSavingEdit(false);
+    if (res.success) {
+      setAnalytics((prev) => ({
+        ...prev,
+        enquiries: prev.enquiries.map((item) =>
+          item.id === id
+            ? { ...item, first_name, last_name, phone, service, status, message }
+            : item
+        ),
+      }));
+      setEditingEnquiry(null);
+      toast.success('Project details updated in Supabase!');
+    } else {
+      toast.error('Failed to update project in Supabase');
+    }
+  };
+
+  const handleDelete = async (enquiry) => {
+    const clientName = `${enquiry.first_name || ''} ${enquiry.last_name || ''}`.trim() || 'this enquiry';
+    if (!window.confirm(`Are you sure you want to permanently delete "${clientName}" from Supabase?`)) {
+      return;
+    }
+
+    setDeletingId(enquiry.id);
+    const res = await deleteContactEnquiry(enquiry.id);
+    setDeletingId(null);
+
+    if (res.success) {
+      setAnalytics((prev) => ({
+        ...prev,
+        enquiries: prev.enquiries.filter((item) => item.id !== enquiry.id),
+      }));
+      toast.success('Enquiry permanently deleted from Supabase!');
+    } else {
+      toast.error('Failed to delete enquiry from Supabase');
+    }
   };
 
   const copySqlToClipboard = () => {
@@ -154,18 +286,28 @@ export default function Admin() {
               ADMIN LOGIN
             </div>
 
-            <form onSubmit={handleLogin}>
-              <div className="form-floating-outlined">
+            <form onSubmit={handleLogin} autoComplete="off">
+              <div className="form-floating-outlined password-input-wrap">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   className="form-control"
                   id="adminPasswordOutlined"
                   placeholder=" "
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
+                  autoComplete="new-password"
                   required
                 />
                 <label htmlFor="adminPasswordOutlined">Enter Password</label>
+                <button
+                  type="button"
+                  className="btn-toggle-password"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  <i className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'}`}></i>
+                </button>
               </div>
 
               <button
@@ -192,6 +334,13 @@ export default function Admin() {
     );
   }
 
+  const filteredEnquiries = analytics.enquiries.filter(
+    (e) => filterStatus === 'All' || (e.status || 'Pending') === filterStatus
+  );
+  const pendingCount = analytics.enquiries.filter((e) => (e.status || 'Pending') === 'Pending').length;
+  const inProgressCount = analytics.enquiries.filter((e) => e.status === 'In Progress').length;
+  const completedCount = analytics.enquiries.filter((e) => e.status === 'Completed').length;
+
   return (
     <div className="admin-page container-fluid px-3 px-md-5">
       <SEOHead
@@ -210,16 +359,33 @@ export default function Admin() {
         </div>
 
         <div className="admin-header-actions">
+          {lastRefreshed && (
+            <span className="text-muted small me-1 d-none d-sm-inline">
+              <i className="bi bi-clock-history me-1"></i>
+              Updated {lastRefreshed.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            </span>
+          )}
+
           <button
-            className="btn btn-outline-primary btn-sm"
-            onClick={loadData}
-            disabled={loading}
+            className="btn btn-outline-primary btn-sm d-inline-flex align-items-center"
+            onClick={() => loadData(false)}
+            disabled={loading || isRefreshing}
+            title="Refresh analytics and client leads"
           >
-            <i className={`bi bi-arrow-clockwise me-1 ${loading ? 'spin' : ''}`}></i>
-            Refresh Data
+            {isRefreshing ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <span>Refreshing...</span>
+              </>
+            ) : (
+              <>
+                <i className="bi bi-arrow-clockwise me-1"></i>
+                <span>Refresh Data</span>
+              </>
+            )}
           </button>
 
-          <button className="btn btn-outline-danger btn-sm" onClick={handleLogout}>
+          <button className="btn btn-outline-danger btn-sm d-inline-flex align-items-center" onClick={handleLogout}>
             <i className="bi bi-box-arrow-right me-1"></i>
             Logout
           </button>
@@ -305,68 +471,161 @@ export default function Admin() {
 
         {activeTab === 'enquiries' && (
           <div>
+            <div className="enquiry-filter-bar">
+              <div className="filter-pills">
+                <button
+                  type="button"
+                  className={`filter-pill ${filterStatus === 'All' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('All')}
+                >
+                  All Leads ({analytics.enquiries.length})
+                </button>
+                <button
+                  type="button"
+                  className={`filter-pill status-pending ${filterStatus === 'Pending' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('Pending')}
+                >
+                  🟡 Pending ({pendingCount})
+                </button>
+                <button
+                  type="button"
+                  className={`filter-pill status-in-progress ${filterStatus === 'In Progress' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('In Progress')}
+                >
+                  🔵 In Progress ({inProgressCount})
+                </button>
+                <button
+                  type="button"
+                  className={`filter-pill status-completed ${filterStatus === 'Completed' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('Completed')}
+                >
+                  🟢 Completed ({completedCount})
+                </button>
+              </div>
+            </div>
+
             {analytics.enquiries.length === 0 ? (
-              <div className="text-center py-4 text-muted">
+              <div className="text-center py-5 text-muted">
                 <i className="bi bi-inbox fs-1 d-block mb-2"></i>
                 No client enquiries logged yet. Form submissions will appear here automatically!
               </div>
+            ) : filteredEnquiries.length === 0 ? (
+              <div className="text-center py-5 text-muted">
+                <i className="bi bi-filter-circle fs-1 d-block mb-2"></i>
+                No enquiries with status <strong>"{filterStatus}"</strong> found.
+              </div>
             ) : (
-              analytics.enquiries.map((enquiry, idx) => (
-                <div
-                  key={enquiry.id || idx}
-                  className="enquiry-row-card"
-                  style={{ animationDelay: `${idx * 120}ms` }}
-                >
-                  <div className="enquiry-row-header">
-                    <div>
-                      <h4 className="enquiry-name">
-                        {enquiry.first_name} {enquiry.last_name}
-                      </h4>
-                      <div className="text-muted small">
-                        <i className="bi bi-calendar3 me-1"></i>
-                        {new Date(enquiry.created_at).toLocaleString('en-IN')}
+              filteredEnquiries.map((enquiry, idx) => {
+                  const currentStatus = enquiry.status || 'Pending';
+                  return (
+                    <div
+                      key={enquiry.id || idx}
+                      className={`enquiry-row-card status-border-${currentStatus.toLowerCase().replace(/\s+/g, '-')}`}
+                      style={{ animationDelay: `${idx * 80}ms` }}
+                    >
+                      <div className="enquiry-row-header">
+                        <div>
+                          <div className="d-flex align-items-center gap-2 flex-wrap">
+                            <h4 className="enquiry-name">
+                              {enquiry.first_name} {enquiry.last_name}
+                            </h4>
+                            <span className={`status-badge status-${currentStatus.toLowerCase().replace(/\s+/g, '-')}`}>
+                              {currentStatus === 'Completed'
+                                ? '✓ Completed'
+                                : currentStatus === 'In Progress'
+                                ? '⚡ In Progress'
+                                : '⏳ Pending'}
+                            </span>
+                          </div>
+                          <div className="text-muted small mt-1">
+                            <i className="bi bi-calendar3 me-1"></i>
+                            {new Date(enquiry.created_at).toLocaleString('en-IN')}
+                          </div>
+                        </div>
+
+                        <div className="enquiry-header-badges">
+                          <span className="enquiry-service-badge">
+                            {enquiry.service || 'General Enquiry'}
+                          </span>
+
+                          <select
+                            className={`enquiry-status-select status-${currentStatus.toLowerCase().replace(/\s+/g, '-')}`}
+                            value={currentStatus}
+                            onChange={(e) => handleStatusChange(enquiry.id, e.target.value, currentStatus)}
+                            title="Click to change project status directly"
+                          >
+                            <option value="Pending">🟡 Pending</option>
+                            <option value="In Progress">🔵 In Progress</option>
+                            <option value="Completed">🟢 Completed</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="enquiry-message-box">
+                        <strong>Message: </strong> {enquiry.message || 'No message attached.'}
+                      </div>
+
+                      <div className="enquiry-actions">
+                        {/\d{5,}/.test(enquiry.phone) ? (
+                          <>
+                            <a
+                              href={`tel:${enquiry.phone}`}
+                              className="btn-enquiry-call"
+                            >
+                              <i className="bi bi-telephone-fill"></i>
+                              {enquiry.phone}
+                            </a>
+
+                            <a
+                              href={`https://wa.me/${enquiry.phone.replace(/[^0-9]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-enquiry-wa"
+                            >
+                              <i className="bi bi-whatsapp"></i>
+                              WhatsApp
+                            </a>
+                          </>
+                        ) : (
+                          <span className="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                            <i className="bi bi-whatsapp me-1"></i>
+                            {enquiry.phone || 'Initiated via Floating Widget'}
+                          </span>
+                        )}
+
+                        <button
+                          type="button"
+                          className="btn-enquiry-edit"
+                          onClick={() => handleOpenEdit(enquiry)}
+                          title="Edit client or project details"
+                        >
+                          <i className="bi bi-pencil-square"></i>
+                          Edit Project
+                        </button>
+
+                        <button
+                          type="button"
+                          className="btn-enquiry-delete"
+                          onClick={() => handleDelete(enquiry)}
+                          disabled={deletingId === enquiry.id}
+                          title="Permanently delete from Supabase"
+                        >
+                          {deletingId === enquiry.id ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm me-1"></span>
+                              Deleting...
+                            </>
+                          ) : (
+                            <>
+                              <i className="bi bi-trash3-fill"></i>
+                              Delete
+                            </>
+                          )}
+                        </button>
                       </div>
                     </div>
-
-                    <span className="enquiry-service-badge">
-                      {enquiry.service || 'General Enquiry'}
-                    </span>
-                  </div>
-
-                  <div className="enquiry-message-box">
-                    <strong>Message: </strong> {enquiry.message || 'No message attached.'}
-                  </div>
-
-                  <div className="enquiry-actions">
-                    {/\d{5,}/.test(enquiry.phone) ? (
-                      <>
-                        <a
-                          href={`tel:${enquiry.phone}`}
-                          className="btn-enquiry-call"
-                        >
-                          <i className="bi bi-telephone-fill"></i>
-                          Call {enquiry.phone}
-                        </a>
-
-                        <a
-                          href={`https://wa.me/${enquiry.phone.replace(/[^0-9]/g, '')}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-enquiry-wa"
-                        >
-                          <i className="bi bi-whatsapp"></i>
-                          WhatsApp Client
-                        </a>
-                      </>
-                    ) : (
-                      <span className="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
-                        <i className="bi bi-whatsapp me-1"></i>
-                        {enquiry.phone || 'Initiated via Floating Widget'}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))
+                  );
+                })
             )}
           </div>
         )}
@@ -425,6 +684,145 @@ export default function Admin() {
           </div>
         )}
       </div>
+
+      {editingEnquiry && (
+        <div className="admin-modal-backdrop" onClick={() => setEditingEnquiry(null)}>
+          <div className="admin-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3 className="admin-modal-title">
+                <i className="bi bi-pencil-square text-primary me-2"></i>
+                Edit Project & Lead Details
+              </h3>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setEditingEnquiry(null)}
+                aria-label="Close edit modal"
+              >
+                <i className="bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="admin-modal-form">
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label small fw-semibold">First Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editingEnquiry.first_name}
+                    onChange={(e) =>
+                      setEditingEnquiry({ ...editingEnquiry, first_name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label small fw-semibold">Last Name / Tag</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editingEnquiry.last_name}
+                    onChange={(e) =>
+                      setEditingEnquiry({ ...editingEnquiry, last_name: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label small fw-semibold">Phone Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editingEnquiry.phone}
+                    onChange={(e) =>
+                      setEditingEnquiry({ ...editingEnquiry, phone: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label small fw-semibold">Service</label>
+                  <select
+                    className="form-select"
+                    value={editingEnquiry.service}
+                    onChange={(e) =>
+                      setEditingEnquiry({ ...editingEnquiry, service: e.target.value })
+                    }
+                  >
+                    <option value="Business Website">Business Website</option>
+                    <option value="Landing Page">Landing Page</option>
+                    <option value="Clinic Website">Clinic Website</option>
+                    <option value="Packers & Movers Website">Packers & Movers Website</option>
+                    <option value="Restaurant Website">Restaurant Website</option>
+                    <option value="Custom Web App">Custom Web App</option>
+                    <option value="Direct WhatsApp Chat">Direct WhatsApp Chat</option>
+                    <option value="General Enquiry">General Enquiry</option>
+                  </select>
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label small fw-semibold">Project Status</label>
+                  <select
+                    className="form-select fw-semibold"
+                    value={editingEnquiry.status || 'Pending'}
+                    onChange={(e) =>
+                      setEditingEnquiry({ ...editingEnquiry, status: e.target.value })
+                    }
+                  >
+                    <option value="Pending">🟡 Pending (Not Started / Under Review)</option>
+                    <option value="In Progress">🔵 In Progress (Work Ongoing)</option>
+                    <option value="Completed">🟢 Completed (Project Finished)</option>
+                  </select>
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label small fw-semibold">Project Message / Notes</label>
+                  <textarea
+                    rows="3"
+                    className="form-control"
+                    value={editingEnquiry.message}
+                    onChange={(e) =>
+                      setEditingEnquiry({ ...editingEnquiry, message: e.target.value })
+                    }
+                    placeholder="Enter project requirements, notes, or updates..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div className="admin-modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => setEditingEnquiry(null)}
+                  disabled={isSavingEdit}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSavingEdit}
+                >
+                  {isSavingEdit ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2"></span>
+                      Saving to Supabase...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-check2-circle me-1"></i>
+                      Save to Supabase
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

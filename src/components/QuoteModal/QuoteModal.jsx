@@ -9,8 +9,7 @@ export default function QuoteModal() {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    service: 'Business Website',
-    details: '',
+    service: '',
   });
 
   useEffect(() => {
@@ -52,17 +51,17 @@ export default function QuoteModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone) return;
+    if (!formData.name || !formData.phone || !formData.service) return;
 
     saveContactEnquiry({
       firstName: formData.name,
       lastName: '(Quote Popup)',
       phone: formData.phone,
       service: formData.service,
-      message: formData.details || 'Requested Free Quote Popup',
+      message: 'Requested Free Quote Popup',
     });
 
-    const text = `Hi ARWEBX! I would like to get a Free Quote.\n\n👤 Name: ${formData.name}\n📞 Phone: ${formData.phone}\n💼 Service: ${formData.service}${formData.details ? `\n📝 Details: ${formData.details}` : ''}`;
+    const text = `Hi ARWEBX! I would like to get a Free Quote.\n\n👤 Name: ${formData.name}\n📞 Phone: ${formData.phone}\n💼 Service: ${formData.service}`;
     const whatsappUrl = `https://wa.me/918332837703?text=${encodeURIComponent(text)}`;
 
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
@@ -74,12 +73,13 @@ export default function QuoteModal() {
   return (
     <div className="quote-modal-backdrop" onClick={handleClose} aria-modal="true" role="dialog">
       <div className="quote-modal-card" onClick={(e) => e.stopPropagation()}>
-        <button className="quote-modal-close" onClick={handleClose} aria-label="Close quote modal">
-          <i className="bi bi-x-lg" aria-hidden="true"></i>
-        </button>
-
         <div className="quote-modal-header">
-          <h2 className="quote-modal-title">Get a Free Quote</h2>
+          <div className="quote-modal-header-row">
+            <h2 className="quote-modal-title">Get a Free Quote</h2>
+            <button className="quote-modal-close" onClick={handleClose} aria-label="Close quote modal">
+              <i className="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+          </div>
           <p className="quote-modal-subtitle">
             Tell us about your project and get a custom estimate within 24 hours.
           </p>
@@ -116,7 +116,9 @@ export default function QuoteModal() {
               className="form-select quote-input"
               value={formData.service}
               onChange={handleChange}
+              required
             >
+              <option value=""Select Service>-- Select Service * --</option>
               <option value="Business Website">Business Website</option>
               <option value="Landing Page">Landing Page</option>
               <option value="Clinic Website">Clinic Website</option>

@@ -79,6 +79,8 @@ export default function Agreement() {
         canonical="https://arwebx.vercel.app/agreement"
       />
 
+      <h1 className="visually-hidden">ARWEBX Web Development Project Working Terms</h1>
+
       <section className="agreement-content" aria-label="Agreement sections">
         <div className="container-fluid px-3 px-md-5">
           <div className="row justify-content-center">

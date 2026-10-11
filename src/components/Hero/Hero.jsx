@@ -243,6 +243,7 @@ export default function Hero() {
                       alt={item.title}
                       className="hero-7-card-img"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="hero-7-card-content">
                       <span className="hero-7-card-cat">{item.category}</span>
@@ -256,6 +257,7 @@ export default function Hero() {
                       alt={item.title}
                       className="hero-7-card-img"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="hero-7-card-content">
                       <span className="hero-7-card-cat">{item.category}</span>

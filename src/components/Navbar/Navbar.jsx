@@ -30,7 +30,7 @@ export default function Navbar() {
     >
       <div className="container-fluid px-3 px-md-5">
         <Link className="navbar-brand" to="/" onClick={closeMobileMenu}>
-          <img src={logoImg} alt="ARWEBX Logo" className="navbar-logo-img" loading="lazy" />
+          <img src={logoImg} alt="ARWEBX Logo" className="navbar-logo-img" decoding="async" fetchPriority="high" />
         </Link>
 
         <button

@@ -50,7 +50,7 @@ export default function About() {
           <div className="row justify-content-center">
             <div className="col-lg-12">
               <div className="about-story-content reveal-up">
-                <h2 className="about-story-title">Our Approach</h2>
+                <h1 className="about-story-title">Our Approach</h1>
                 <p>
                   At ARWEBX, we believe that a great website is more than just good looks. It's a 
                   strategic tool that builds trust, communicates value, and drives real business results.

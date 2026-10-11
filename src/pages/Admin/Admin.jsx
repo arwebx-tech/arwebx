@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import SEOHead from '../../components/SEOHead/SEOHead';
-import { getAdminAnalytics, updateContactEnquiry, deleteContactEnquiry } from '../../lib/supabase';
+import { supabase, getAdminAnalytics, updateContactEnquiry, deleteContactEnquiry } from '../../lib/supabase';
 import './Admin.css';
-
-const DEFAULT_ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || 'Arwebx@0096';
 
 const SQL_SETUP_SCRIPT = `-- Run this script in Supabase SQL Editor (supabase.com -> SQL Editor) to create tables instantly!
 
@@ -29,23 +27,23 @@ CREATE TABLE IF NOT EXISTS public.contact_enquiries (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- 3. Enable RLS and create public policies
+-- 3. Enable RLS and create secure policies
 ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_enquiries ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Allow public insert on page_views" ON public.page_views;
-DROP POLICY IF EXISTS "Allow public select on page_views" ON public.page_views;
+DROP POLICY IF EXISTS "Allow authenticated select on page_views" ON public.page_views;
 DROP POLICY IF EXISTS "Allow public insert on contact_enquiries" ON public.contact_enquiries;
-DROP POLICY IF EXISTS "Allow public select on contact_enquiries" ON public.contact_enquiries;
-DROP POLICY IF EXISTS "Allow public update on contact_enquiries" ON public.contact_enquiries;
-DROP POLICY IF EXISTS "Allow public delete on contact_enquiries" ON public.contact_enquiries;
+DROP POLICY IF EXISTS "Allow authenticated select on contact_enquiries" ON public.contact_enquiries;
+DROP POLICY IF EXISTS "Allow authenticated update on contact_enquiries" ON public.contact_enquiries;
+DROP POLICY IF EXISTS "Allow authenticated delete on contact_enquiries" ON public.contact_enquiries;
 
 CREATE POLICY "Allow public insert on page_views" ON public.page_views FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public select on page_views" ON public.page_views FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated select on page_views" ON public.page_views FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Allow public insert on contact_enquiries" ON public.contact_enquiries FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public select on contact_enquiries" ON public.contact_enquiries FOR SELECT USING (true);
-CREATE POLICY "Allow public update on contact_enquiries" ON public.contact_enquiries FOR UPDATE USING (true) WITH CHECK (true);
-CREATE POLICY "Allow public delete on contact_enquiries" ON public.contact_enquiries FOR DELETE USING (true);
+CREATE POLICY "Allow authenticated select on contact_enquiries" ON public.contact_enquiries FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated update on contact_enquiries" ON public.contact_enquiries FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow authenticated delete on contact_enquiries" ON public.contact_enquiries FOR DELETE TO authenticated USING (true);
 `;
 
 function CountUp({ end = 0, duration = 1200 }) {
@@ -88,11 +86,12 @@ function CountUp({ end = 0, duration = 1200 }) {
 }
 
 export default function Admin() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem('arwebx_admin_auth') === 'true';
-  });
+  const [authChecking, setAuthChecking] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
   const [passcode, setPasscode] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordActive, setIsPasswordActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('enquiries');
   const [copiedSql, setCopiedSql] = useState(false);
@@ -110,6 +109,53 @@ export default function Admin() {
   const [deletingId, setDeletingId] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function checkAuthSession() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (isMounted) {
+          if (session) {
+            setIsAuthenticated(true);
+            sessionStorage.setItem('arwebx_admin_auth', 'true');
+            localStorage.setItem('arwebx_is_admin', 'true');
+          } else {
+            setIsAuthenticated(false);
+            sessionStorage.removeItem('arwebx_admin_auth');
+            localStorage.removeItem('arwebx_is_admin');
+          }
+        }
+      } catch (err) {
+        console.error('Session check error:', err);
+      } finally {
+        if (isMounted) {
+          setAuthChecking(false);
+        }
+      }
+    }
+
+    checkAuthSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (isMounted) {
+        setIsAuthenticated(!!session);
+        if (session) {
+          sessionStorage.setItem('arwebx_admin_auth', 'true');
+          localStorage.setItem('arwebx_is_admin', 'true');
+        } else {
+          sessionStorage.removeItem('arwebx_admin_auth');
+          localStorage.removeItem('arwebx_is_admin');
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription?.unsubscribe();
+    };
+  }, []);
 
   const loadData = async (silent = true) => {
     if (!silent) setIsRefreshing(true);
@@ -146,30 +192,59 @@ export default function Admin() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const inputVal = passcode.trim();
+    const inputEmail = email.trim();
+    const inputPassword = passcode.trim();
 
-    if (inputVal === DEFAULT_ADMIN_PASSCODE) {
-      sessionStorage.setItem('arwebx_admin_auth', 'true');
-      localStorage.setItem('arwebx_is_admin', 'true');
-      setPasscode('');
-      setShowPassword(false);
-      setIsAuthenticated(true);
-      toast.success('Welcome to ARWEBX Arunchand!');
+    if (!inputEmail || !inputPassword) {
+      toast.error('Please enter email and password');
       return;
     }
 
-    setPasscode('');
-    setShowPassword(false);
-    toast.error('Incorrect password');
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: inputEmail,
+        password: inputPassword,
+      });
+
+      if (error) {
+        toast.error(error.message || 'Incorrect email or password');
+        setPasscode('');
+        setShowPassword(false);
+        return;
+      }
+
+      if (data?.session) {
+        sessionStorage.setItem('arwebx_admin_auth', 'true');
+        localStorage.setItem('arwebx_is_admin', 'true');
+        setEmail('');
+        setPasscode('');
+        setShowPassword(false);
+        setIsAuthenticated(true);
+        toast.success('Welcome to ARWEBX Arunchand!');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      toast.error('Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
     sessionStorage.removeItem('arwebx_admin_auth');
     localStorage.removeItem('arwebx_is_admin');
+    setEmail('');
     setPasscode('');
     setShowPassword(false);
+    setIsPasswordActive(false);
     setAnalytics({
       totalViews: 0,
       todayViews: 0,
@@ -270,6 +345,16 @@ export default function Admin() {
     setTimeout(() => setCopiedSql(false), 2000);
   };
 
+  if (authChecking) {
+    return (
+      <div className="admin-page container-fluid px-3 px-md-5 d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="admin-page container-fluid px-3 px-md-5">
@@ -277,6 +362,7 @@ export default function Admin() {
           title="Admin Login | ARWEBX"
           description="ARWEBX Secret Admin Dashboard"
           canonical="https://arwebx.vercel.app/admin"
+          noindex={true}
         />
 
         <div className="admin-login-wrapper">
@@ -287,22 +373,48 @@ export default function Admin() {
             </div>
 
             <form onSubmit={handleLogin} autoComplete="off">
+              {/* Dummy hidden inputs to absorb browser autofill */}
+              <input type="text" name="dummy_username" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+              <input type="password" name="dummy_password" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+              <div className="form-floating-outlined">
+                <input
+                  type="email"
+                  className="form-control"
+                  id="adminAccountEmail"
+                  name="admin_account_email"
+                  placeholder=" "
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="off"
+                  required
+                />
+                <label htmlFor="adminAccountEmail">Email</label>
+              </div>
+
               <div className="form-floating-outlined password-input-wrap">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? 'text' : (isPasswordActive ? 'password' : 'text')}
+                  style={!showPassword ? { WebkitTextSecurity: 'disc' } : {}}
                   className="form-control"
-                  id="adminPasswordOutlined"
+                  id="adminAccessKey"
+                  name="admin_access_token"
                   placeholder=" "
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  autoComplete="new-password"
+                  onFocus={() => setIsPasswordActive(true)}
+                  onKeyDown={() => setIsPasswordActive(true)}
+                  autoComplete="one-time-code"
                   required
                 />
-                <label htmlFor="adminPasswordOutlined">Enter Password</label>
+                <label htmlFor="adminAccessKey">Password</label>
                 <button
                   type="button"
                   className="btn-toggle-password"
-                  onClick={() => setShowPassword((prev) => !prev)}
+                  onClick={() => {
+                    setIsPasswordActive(true);
+                    setShowPassword((prev) => !prev);
+                  }}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   tabIndex={-1}
                 >
@@ -347,6 +459,7 @@ export default function Admin() {
         title="Admin Dashboard | ARWEBX"
         description="ARWEBX Secret Admin Analytics & Enquiries Dashboard"
         canonical="https://arwebx.vercel.app/admin"
+        noindex={true}
       />
 
       <div className="admin-header">

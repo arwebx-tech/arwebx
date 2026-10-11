@@ -6,6 +6,7 @@ export default function SEOHead({
   canonical,
   image = 'https://arwebx.vercel.app/og_img.png',
   ogType = 'website',
+  noindex = false,
 }) {
   useEffect(() => {
     document.title = title;
@@ -21,6 +22,7 @@ export default function SEOHead({
     };
 
     setMeta('name', 'description', description);
+    setMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow');
 
     let link = document.querySelector('link[rel="canonical"]');
     if (!link) {
@@ -40,7 +42,7 @@ export default function SEOHead({
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
     setMeta('name', 'twitter:image', image);
-  }, [title, description, canonical, image, ogType]);
+  }, [title, description, canonical, image, ogType, noindex]);
 
   return null;
 }

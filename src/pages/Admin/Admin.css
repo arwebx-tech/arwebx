@@ -58,6 +58,14 @@
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
+.form-floating-outlined .form-control:-webkit-autofill,
+.form-floating-outlined .form-control:-webkit-autofill:hover,
+.form-floating-outlined .form-control:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface, #ffffff) inset !important;
+  -webkit-text-fill-color: var(--color-heading) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .form-floating-outlined label {
   position: absolute;
   top: 50%;

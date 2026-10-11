@@ -7,7 +7,7 @@ ARWEBX ([arwebx.vercel.app](https://arwebx.vercel.app)) is a high-performance we
 ## 🌟 Key Features & Capabilities
 
 ### 1. 3D Interactive Hero with Continuous Arc Carousel
-- **Continuous 3D Cylindrical Track**: Powered by native `requestAnimationFrame` mathematics, rotating 18 mockup cards (`DISPLAY_ITEMS` duplicated 3x) in a seamless, infinite cylindrical loop.
+- **Continuous 3D Cylindrical Track**: Powered by native `requestAnimationFrame` mathematics, rotating 18 mockup cards in a seamless, infinite cylindrical loop.
 - **Dual-Layer Laser Wipe Effect**: Real-time pixel-precise wipe reveal comparing card positions against the central laser beam (`laserX = containerWidth / 2`).
   - Base layer: Grayscale card (`grayscale(1) contrast(1.1)`).
   - Top layer: Full-color card dynamically revealed via `clip-path: inset(0 0 0 ${revealPercent}%)`.
@@ -15,46 +15,34 @@ ARWEBX ([arwebx.vercel.app](https://arwebx.vercel.app)) is a high-performance we
 - **Trust Badges Row**: Highlighting `Responsive Design`, `Mobile First Approach`, and `WhatsApp Enquiries`.
 
 ### 2. Direct Lead Capture & Instant Quote Modal
-- **Interactive Quote Modal (`QuoteModal.jsx`)**: Accessible from CTA buttons across all pages, allowing visitors to request immediate quotes with project requirements, service selection, and budget estimates.
+- **Interactive Quote Modal (`QuoteModal.jsx`)**: Accessible from CTA buttons across all pages, allowing visitors to request immediate quotes with project requirements, service selection, and contact details.
 - **Dual-Action Submissions**:
-  1. **Direct WhatsApp Routing**: Form submissions format project details into a pre-filled message sent directly to `+91 83328 37703` via WhatsApp Web/App.
-  2. **Supabase Database Backup**: All lead submissions are simultaneously saved into the `contact_enquiries` table.
+  1. **Direct WhatsApp Routing**: Form submissions format project details into a pre-filled message sent directly to WhatsApp.
+  2. **Database Persistence**: All lead submissions are simultaneously saved into the Supabase database.
 - **Floating Action Buttons (`FloatingActions.jsx`)**: One-click WhatsApp and phone call buttons with interactive tooltips and pulse animations.
 
-### 3. Supabase Real-Time Analytics & CRM Lead Management
-- **Silent Page View Tracking (`usePageView.js` + `trackPageView`)**:
+### 3. Real-Time Analytics & CRM Lead Management
+- **Silent Page View Tracking (`usePageView.js`)**:
   - Automatically records visitor paths, timestamps, user-agent strings, and referrers into Supabase (`page_views` table).
-  - **Smart Filtering**: Excludes localhost (`localhost`, `127.0.0.1`, `192.168.*`), active admin sessions (`sessionStorage`), devices marked with `arwebx_is_admin` (`localStorage`), and `/admin` routes.
-  - **Secret Admin Shortcut**: Visiting any page with `?admin=true` permanently tags the browser device as admin and halts tracking.
-- **Secret Admin Portal (`/admin`)**:
-  - **Passcode Authentication**: Fast, secure passcode verification (`Arwebx@0096`).
-  - **Live Count-Up Stat Cards**: Animated counters for Total Page Views, Today's Visitors, Total Client Enquiries, and Supabase connection status.
-  - **Client Leads Tab**: View client names, contact numbers, enquiry types, timestamps, and attached messages. Includes instant **Call Client** (`tel:`) and **WhatsApp Client** (`wa.me`) buttons.
-  - **Page Views Activity Tab**: Chronological table displaying recent visitor routes and device user agents.
-  - **SQL Setup Tab**: Built-in 1-click clipboard copier for Supabase schema and RLS policies.
+  - Excludes localhost, internal IPs, active admin sessions, and administrative routes.
+- **Secure Admin Portal (`/admin`)**:
+  - **Supabase Authentication**: Protected via Supabase Built-in Auth with secure session listeners.
+  - **Row Level Security (RLS)**: Enforces database-level isolation — public visitors can only insert leads/page views; only authenticated admin can query, edit, or delete leads.
+  - **Live Stat Cards**: Animated counters for Total Page Views, Today's Visitors, and Total Client Enquiries.
+  - **Client Leads CRM**: View, filter by status (Pending, In Progress, Completed), edit project details, and manage client enquiries with 1-click Call and WhatsApp actions.
 
 ### 4. Smooth Scrolling & Scroll-Reveal Architecture
 - **Lenis Smooth Scroll Engine**: Inertia-based smooth wheel scrolling powered by Lenis.
 - **Deterministic Scroll Restoration**: Disables browser history scroll retention (`scrollRestoration = 'manual'`) and guarantees every page navigation starts at `(0, 0)`.
-- **Progressive Enhancement (`useScrollReveal.js`)**: Uses `IntersectionObserver` to smoothly reveal and stagger sections as the user scrolls, with a 200ms safety fallback so content is never hidden.
+- **Progressive Enhancement (`useScrollReveal.js`)**: Uses `IntersectionObserver` to smoothly reveal and stagger sections as the user scrolls, with fallback safety.
 - **Reduced Motion Support**: Automatically honors `prefers-reduced-motion: reduce` for accessibility.
 
-### 5. SEO & Security Engineering
-- **Unified Branding Titles**: Consistent page titles optimized within Google's 50–60 character limit:
-  | Page | Route | Title Tag |
-  | :--- | :--- | :--- |
-  | **Home** | `/` | `ARWEBX \| Fast, Modern Websites for Growing Businesses` |
-  | **Services** | `/services` | `Services \| ARWEBX - Modern Websites for Growing Businesses` |
-  | **About** | `/about` | `About Us \| ARWEBX - Modern Websites for Growing Businesses` |
-  | **Contact** | `/contact` | `Contact Us \| ARWEBX - Modern Websites for Growing Businesses` |
-  | **Terms** | `/agreement` | `Project Terms \| ARWEBX - Modern Websites for Growing Businesses` |
-  | **Admin** | `/admin` | `Admin Dashboard \| ARWEBX` |
-- **`SEOHead.jsx` Component**: Per-page dynamic document head manager handling:
-  - Canonical link generation (`<link rel="canonical" ... />`).
-  - Open Graph meta tags (`og:title`, `og:description`, `og:url`, `og:type`, `og:image`).
-  - Twitter Card summary tags (`twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`).
-- **`public/sitemap.xml`**: Strict XML sitemap containing only valid, indexable public routes (`/`, `/services`, `/about`, `/agreement`, `/contact`).
-- **`public/robots.txt`**: Standard crawler guidelines with explicit security rule `Disallow: /admin` to prevent search engine indexing of the private admin portal.
+### 5. SEO & Performance Engineering
+- **Optimized Bundle Splitting**: Rolldown/Vite manual chunking splits React, Supabase, and UI libraries for parallel loading and permanent browser caching. Initial application code is under 55 kB (18 kB gzipped).
+- **Route-Level Code Splitting**: All pages lazy-loaded via `React.lazy()` & `Suspense`.
+- **Dynamic SEO Head (`SEOHead.jsx`)**: Per-page dynamic metadata manager handling Title, Meta Description, Canonical URLs, Open Graph, and Twitter Cards.
+- **Search Engine Guidelines**: XML sitemap (`sitemap.xml`) and crawler instructions (`robots.txt`) with `Disallow: /admin` and `noindex` protection on administrative routes.
+- **Structured Data**: Schema.org JSON-LD markup for `WebSite` and `ProfessionalService`.
 
 ---
 
@@ -64,14 +52,14 @@ ARWEBX ([arwebx.vercel.app](https://arwebx.vercel.app)) is a high-performance we
 arwebx/
 ├── index.html                            # Master HTML template, Google Fonts, Bootstrap Icons, Lenis CDN
 ├── package.json                          # Dependencies & build scripts
-├── vite.config.js                        # Vite build configuration
+├── vite.config.js                        # Vite build configuration with Rolldown chunk splitting
 ├── vercel.json                           # Vercel deployment routing & SPA fallback rewrites
 │
 ├── public/
 │   ├── favicon.ico                       # Browser tab icon
-│   ├── og_img.png                        # Social media Open Graph preview image (1200x630)
+│   ├── og_img.png                        # Social media Open Graph preview image (1201x630)
 │   ├── robots.txt                        # Search engine rules (Disallows /admin)
-│   └── sitemap.xml                       # 5 Active XML sitemap routes
+│   └── sitemap.xml                       # Active XML sitemap routes
 │
 └── src/
     ├── App.jsx                           # Root application: Lazy routes, Suspense, Lenis scroll, layout
@@ -82,18 +70,7 @@ arwebx/
     │   ├── logo/
     │   │   └── logo.png                  # Official ARWEBX branding logo
     │   ├── images/                       # Hero 3D carousel showcase images (6 mockups)
-    │   │   ├── clinic.jpg
-    │   │   ├── fertilizers.jpg
-    │   │   ├── interior.jpg
-    │   │   ├── portfolio.jpg
-    │   │   ├── restaurant.jpg
-    │   │   └── saloon.jpg
     │   └── services/                     # Service category showcase images (5 mockups)
-    │       ├── business.jpg
-    │       ├── clinic.jpg
-    │       ├── landing.jpg
-    │       ├── packers.jpg
-    │       └── restaurant.jpg
     │
     ├── components/
     │   ├── ContactForm/                  # Contact form with validation, WhatsApp redirect & Supabase persistence
@@ -118,13 +95,13 @@ arwebx/
     │   └── supabase.js                   # Supabase client, trackPageView, saveContactEnquiry, getAdminAnalytics
     │
     └── pages/
-        ├── Home/                         # Landing page: Hero, Top 3 Services, Why Choose Us, Process, CTA
+        ├── Home/                         # Landing page: Hero, Top Services, Why Choose Us, Process, CTA
         ├── Services/                     # Full services portfolio: Business, Landing, Clinic, Packers, Restaurant
         ├── About/                        # Mission, agency philosophy, tech standards, and core values
         ├── Agreement/                    # Client project terms, payment schedules, milestones, and scope
         ├── Contact/                      # Direct contact details, WhatsApp button, and enquiry form
-        ├── Admin/                        # Private Admin portal: Passcode login, analytics counters, lead cards, SQL generator
-        └── NotFound/                     # Custom 404 page with home redirect
+        ├── Admin/                        # Private Admin portal: Supabase Auth, analytics counters, leads CRM
+        └── NotFound/                     # Custom 404 page with home redirect and noindex protection
 ```
 
 ---
@@ -133,57 +110,29 @@ arwebx/
 
 | Category | Technology | Version | Details / Purpose |
 | :--- | :--- | :--- | :--- |
-| **Framework** | React | `v19.2.8` | Component-based UI library with Concurrent Mode & Suspense |
-| **Build Tool** | Vite | `v8.2.2` | Lightning-fast development server & production bundler |
-| **Routing** | React Router DOM | `v7.18.3` | Client-side routing with lazy route resolution |
-| **Database** | Supabase JS | `v2.116.0` | Cloud database for page views analytics & client leads |
-| **UI & Styling** | Vanilla CSS + Bootstrap | `v5.3.8` | Custom CSS tokens with Bootstrap 5 grid & flex utilities |
-| **Icons** | Bootstrap Icons | `v1.13.1` | Vector icon library loaded via CDN |
-| **Notifications**| React Toastify | `v11.1.0` | Modern toast alert system for admin actions & form feedback |
-| **Smooth Scroll**| Lenis | `v1.1.18` | Inertia-based smooth wheel scrolling engine |
-| **Linter** | Oxlint | `v1.79.0` | High-performance Rust-based JavaScript/JSX linter |
+| **Framework** | React | `v19` | Component-based UI library with Concurrent Mode & Suspense |
+| **Build Tool** | Vite | `v8` | High-performance build tool with Rolldown chunk optimization |
+| **Routing** | React Router DOM | `v7` | Client-side routing with lazy route resolution |
+| **Database & Auth** | Supabase JS | `v2` | Cloud Postgres database & Authentication with Row Level Security |
+| **UI & Styling** | Vanilla CSS + Bootstrap | `v5.3` | Custom CSS design tokens with Bootstrap 5 grid & flex utilities |
+| **Icons** | Bootstrap Icons | `v1.13` | Vector icon library loaded via CDN |
+| **Notifications**| React Toastify | `v11` | Modern toast alert system for admin actions & form feedback |
+| **Smooth Scroll**| Lenis | `v1.1` | Inertia-based smooth wheel scrolling engine |
 
 ---
 
-## 🔑 Admin Portal Guide
+## 🔒 Security Architecture
 
-- **URL**: `https://arwebx.vercel.app/admin`
-- **Default Passcode**: `Arwebx@0096`
-- **Lead Actions**:
-  - Direct 1-click **Call Client**: Initiates immediate phone call via `tel:+91...`.
-  - Direct 1-click **WhatsApp Client**: Opens WhatsApp chat via `wa.me/...`.
-- **Database Schema**:
-  To initialize or verify the Supabase tables, copy the script from the **Database Setup SQL** tab in the admin dashboard and execute it in your Supabase SQL Editor:
-  ```sql
-  -- 1. Create page_views table
-  CREATE TABLE IF NOT EXISTS public.page_views (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    page_path TEXT NOT NULL DEFAULT '/',
-    user_agent TEXT,
-    referrer TEXT,
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-
-  -- 2. Create contact_enquiries table
-  CREATE TABLE IF NOT EXISTS public.contact_enquiries (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT,
-    phone TEXT NOT NULL,
-    service TEXT,
-    message TEXT,
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-
-  -- 3. Enable RLS and create public policies
-  ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
-  ALTER TABLE public.contact_enquiries ENABLE ROW LEVEL SECURITY;
-
-  CREATE POLICY "Allow public insert on page_views" ON public.page_views FOR INSERT WITH CHECK (true);
-  CREATE POLICY "Allow public select on page_views" ON public.page_views FOR SELECT USING (true);
-  CREATE POLICY "Allow public insert on contact_enquiries" ON public.contact_enquiries FOR INSERT WITH CHECK (true);
-  CREATE POLICY "Allow public select on contact_enquiries" ON public.contact_enquiries FOR SELECT USING (true);
-  ```
+1. **Row Level Security (RLS)**:
+   - `contact_enquiries`: Public visitors can only submit (`INSERT`) enquiries. Reading (`SELECT`), modifying (`UPDATE`), or deleting (`DELETE`) records requires valid Supabase Authentication.
+   - `page_views`: Public visitors can only log visits (`INSERT`). Querying traffic metrics (`SELECT`) is strictly restricted to authenticated administrators.
+2. **Authentication**:
+   - Built-in Supabase Authentication (`supabase.auth.signInWithPassword`). Passwords are cryptographically salted and verified in the cloud.
+   - Zero hardcoded passwords, passcodes, or credentials in client bundles or public repositories.
+3. **Frontend Hardening**:
+   - Anti-autofill protections on authentication forms.
+   - External links protected with `rel="noopener noreferrer"`.
+   - Admin and 404 routes flagged with `noindex, nofollow` meta tags and blocked via `robots.txt`.
 
 ---
 
@@ -194,23 +143,22 @@ arwebx/
 npm install
 ```
 
-### 2. Start Local Development Server
+### 2. Environment Setup
+Create a `.env` file in the root directory:
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 3. Start Local Development Server
 ```bash
 npm run dev
 ```
-Runs the Vite development server with Hot Module Replacement (HMR) at `http://localhost:5173`.
-
-### 3. Run Linter
-```bash
-npm run lint
-```
-Uses `oxlint` to scan all project files in ~70ms.
 
 ### 4. Build for Production
 ```bash
 npm run build
 ```
-Generates optimized, minified production assets in the `dist/` folder in under 1 second.
 
 ### 5. Preview Production Build Locally
 ```bash
@@ -222,17 +170,8 @@ npm run preview
 ## 🚀 Deployment
 
 The project is configured for continuous automated deployment on **Vercel**:
-- Any commit pushed to the `main` branch automatically triggers a production build.
-- `vercel.json` provides SPA fallback rewrites (`"rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]`) ensuring all deep routes (`/services`, `/about`, `/contact`, `/agreement`, `/admin`) resolve smoothly without 404 errors.
-
----
-
-## 🧹 Code Hygiene & Optimization Status
-
-- **Zero Dead Code**: Audited every component, stylesheet, hook, and data file; removed obsolete Supabase Auth functions, unused CSS selectors, and orphaned imports.
-- **Zero Inline Junk Comments**: Cleaned unnecessary commented lines and explanatory JSX comments across the entire codebase.
-- **Fast Build Times**: Verified with Vite production build passing with **0 errors** in ~500–700ms.
-- **Zero Unused Assets**: Every single image in `src/assets/` is actively displayed on the site.
+- Any commit pushed to the `main` branch automatically triggers an optimized production build.
+- `vercel.json` provides SPA fallback rewrites ensuring all deep routes resolve smoothly without 404 errors.
 
 ---
 

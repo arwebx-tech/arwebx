@@ -12,6 +12,8 @@ export default function Services() {
         canonical="https://arwebx.vercel.app/services"
       />
 
+      <h1 className="visually-hidden">ARWEBX Web Development Services</h1>
+
       {services.map((service, index) => (
         <section
           className={`service-detail ${index % 2 === 0 ? 'bg-surface' : ''}`}

@@ -118,7 +118,7 @@ export default function QuoteModal() {
               onChange={handleChange}
               required
             >
-              <option value=""Select Service>-- Select Service * --</option>
+              <option value="">-- Select Service * --</option>
               <option value="Business Website">Business Website</option>
               <option value="Landing Page">Landing Page</option>
               <option value="Clinic Website">Clinic Website</option>

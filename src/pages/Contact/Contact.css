@@ -4,7 +4,7 @@
 }
 
 .contact-form-card {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 2.5rem;
@@ -59,7 +59,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: var(--color-bg);
+  background: #0A0A0A;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   text-decoration: none;
@@ -68,8 +68,8 @@
 
 .contact-method:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(79, 70, 229, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 209, 193, 0.12);
+  border-color: rgba(0, 209, 193, 0.4);
 }
 
 .contact-method-icon {
@@ -88,7 +88,7 @@
 }
 
 .contact-method-icon.call {
-  background: var(--color-primary-light);
+  background: rgba(0, 209, 193, 0.15);
   color: var(--color-primary);
 }
 
@@ -114,13 +114,13 @@
   align-items: center;
   gap: 0.625rem;
   padding: 0.875rem 1rem;
-  background: var(--color-bg);
+  background: #0A0A0A;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
 .contact-response .bi {
-  color: var(--color-secondary);
+  color: var(--color-accent);
   font-size: 1.125rem;
   flex-shrink: 0;
   display: inline-flex;

@@ -14,14 +14,15 @@
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   color: var(--color-heading);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  background-color: var(--color-bg);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  background-color: #0A0A0A;
 }
 
 .contact-form .form-control:focus,
 .contact-form .form-select:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 209, 193, 0.2);
+  background-color: #121212;
 }
 
 .contact-form .form-control::placeholder {
@@ -35,18 +36,23 @@
 
 .contact-form .btn-submit {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
   padding: 0.75rem 2rem;
   border-radius: var(--radius-md);
   display: inline-flex;
   align-items: center;
+  background-color: var(--color-primary);
+  color: #0A0A0A;
+  border: none;
   transition: all var(--transition-base);
 }
 
 .contact-form .btn-submit:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 209, 193, 0.4);
+  background-color: var(--color-primary-dark);
+  color: #0A0A0A;
 }
 
 .contact-form .btn-submit:disabled {

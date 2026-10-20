@@ -13,12 +13,13 @@
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.8125rem;
-  color: var(--color-primary);
+  color: var(--color-accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 0.75rem;
   padding: 0.25rem 0.875rem;
-  background: var(--color-primary-light);
+  background: rgba(0, 209, 193, 0.12);
+  border: 1px solid rgba(167, 243, 233, 0.25);
   border-radius: 50px;
 }
 

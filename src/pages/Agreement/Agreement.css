@@ -4,7 +4,7 @@
 }
 
 .agreement-card {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 2.5rem;
@@ -36,8 +36,8 @@
 .agreement-section-number {
   font-weight: 800;
   font-size: 0.875rem;
-  color: var(--color-primary);
-  opacity: 0.5;
+  color: var(--color-accent);
+  opacity: 0.9;
   flex-shrink: 0;
 }
 

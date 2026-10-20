@@ -43,10 +43,12 @@
 
 .floating-call {
   background-color: var(--color-primary);
+  color: #0A0A0A;
 }
 
 .floating-call:hover {
-  box-shadow: 0 6px 24px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 209, 193, 0.45);
+  color: #0A0A0A;
 }
 
 .floating-tooltip {
@@ -55,8 +57,9 @@
   margin-right: 12px;
   top: 50%;
   transform: translateY(-50%) translateX(8px);
-  background: #FFFFFF;
-  color: black;
+  background: #141414;
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.8125rem;
@@ -67,7 +70,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
 }
 

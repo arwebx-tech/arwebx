@@ -48,7 +48,7 @@ export default function Navbar() {
           className={`collapse navbar-collapse ${!collapsed ? 'show' : ''}`}
           id="navbarMain"
         >
-          <ul className="navbar-nav ms-auto me-3 mb-2 mb-lg-0 gap-1">
+          <ul className="navbar-nav ms-xl-4 mb-2 mb-lg-0 gap-1">
             <li className="nav-item">
               <NavLink className="nav-link" to="/" end onClick={closeMobileMenu}>
                 Home

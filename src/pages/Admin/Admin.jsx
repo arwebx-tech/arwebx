@@ -361,7 +361,7 @@ export default function Admin() {
         <SEOHead
           title="Admin Login | ARWEBX"
           description="ARWEBX Secret Admin Dashboard"
-          canonical="https://arwebx.vercel.app/admin"
+          canonical="https://arwebx.in/admin"
           noindex={true}
         />
 
@@ -458,7 +458,7 @@ export default function Admin() {
       <SEOHead
         title="Admin Dashboard | ARWEBX"
         description="ARWEBX Secret Admin Analytics & Enquiries Dashboard"
-        canonical="https://arwebx.vercel.app/admin"
+        canonical="https://arwebx.in/admin"
         noindex={true}
       />
 

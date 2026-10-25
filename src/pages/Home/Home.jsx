@@ -13,7 +13,7 @@ export default function Home() {
       <SEOHead
         title="ARWEBX | Fast, Modern Websites for Growing Businesses"
         description="Transform your online presence with ARWEBX. We design lightning-fast, mobile-first, and conversion-focused websites engineered to drive business growth."
-        canonical="https://arwebx.vercel.app/"
+        canonical="https://arwebx.in/"
       />
 
       <Hero />

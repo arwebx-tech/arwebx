@@ -42,7 +42,7 @@ export default function About() {
       <SEOHead
         title="About Us | ARWEBX - Modern Websites for Growing Businesses"
         description="Learn about ARWEBX — a modern web development studio crafting fast, high-performance websites engineered for growing businesses."
-        canonical="https://arwebx.vercel.app/about"
+        canonical="https://arwebx.in/about"
       />
 
       <section className="about-story" aria-label="Our approach">

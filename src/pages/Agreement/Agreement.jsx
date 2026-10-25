@@ -76,7 +76,7 @@ export default function Agreement() {
       <SEOHead
         title="Project Terms | ARWEBX - Modern Websites for Growing Businesses"
         description="Review the ARWEBX web development project working terms covering project scope, milestones, revisions, intellectual property, and delivery."
-        canonical="https://arwebx.vercel.app/agreement"
+        canonical="https://arwebx.in/agreement"
       />
 
       <h1 className="visually-hidden">ARWEBX Web Development Project Working Terms</h1>

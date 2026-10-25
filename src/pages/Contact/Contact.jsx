@@ -8,7 +8,7 @@ export default function Contact() {
       <SEOHead
         title="Contact Us | ARWEBX - Modern Websites for Growing Businesses"
         description="Get in touch with ARWEBX to build a fast, modern website for your growing business. Reach out via WhatsApp or direct phone call."
-        canonical="https://arwebx.vercel.app/contact"
+        canonical="https://arwebx.in/contact"
       />
 
       <section className="contact-body" aria-label="Contact form and details">

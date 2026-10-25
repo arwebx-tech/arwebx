@@ -9,7 +9,7 @@ export default function Services() {
       <SEOHead
         title="Services | ARWEBX - Modern Websites for Growing Businesses"
         description="Explore ARWEBX web services: custom business websites, landing pages, clinic portals, and custom web applications for growing brands."
-        canonical="https://arwebx.vercel.app/services"
+        canonical="https://arwebx.in/services"
       />
 
       <h1 className="visually-hidden">ARWEBX Web Development Services</h1>

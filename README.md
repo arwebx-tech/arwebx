@@ -1,6 +1,6 @@
 # ARWEBX — Fast, Modern Websites for Growing Businesses
 
-ARWEBX ([arwebx.vercel.app](https://arwebx.vercel.app)) is a high-performance web development studio specializing in fast, modern, conversion-focused websites and web applications for businesses, startups, clinics, restaurants, and growing brands.
+ARWEBX ([arwebx.in](https://arwebx.in)) is a high-performance web development studio specializing in fast, modern, conversion-focused websites and web applications for businesses, startups, clinics, restaurants, and growing brands.
 
 ---
 

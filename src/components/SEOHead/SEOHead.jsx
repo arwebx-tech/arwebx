@@ -4,7 +4,7 @@ export default function SEOHead({
   title,
   description,
   canonical,
-  image = 'https://arwebx.vercel.app/og_img.png',
+  image = 'https://arwebx.in/og_img.png',
   ogType = 'website',
   noindex = false,
 }) {

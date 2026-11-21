@@ -33,7 +33,7 @@ export default function Contact() {
 
                 <div className="contact-info-methods">
                   <a
-                    href="https://wa.me/918332837703"
+                    href="https://wa.me/918106620096"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="contact-method"
@@ -44,12 +44,12 @@ export default function Contact() {
                     </div>
                     <div>
                       <strong>WhatsApp</strong>
-                      <span>8332837703</span>
+                      <span>8106620096</span>
                     </div>
                   </a>
 
                   <a
-                    href="tel:+918332837703"
+                    href="tel:+918106620096"
                     className="contact-method"
                     aria-label="Call ARWEBX"
                   >
@@ -58,7 +58,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <strong>Call</strong>
-                      <span>8332837703</span>
+                      <span>8106620096</span>
                     </div>
                   </a>
                 </div>

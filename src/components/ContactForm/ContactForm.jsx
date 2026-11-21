@@ -44,7 +44,7 @@ export default function ContactForm() {
       formData.message,
     ].join('\n');
 
-    const whatsappUrl = `https://wa.me/918332837703?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/918106620096?text=${encodeURIComponent(message)}`;
 
     setTimeout(() => {
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer');

@@ -62,7 +62,7 @@ export default function QuoteModal() {
     });
 
     const text = `Hi ARWEBX! I would like to get a Free Quote.\n\n👤 Name: ${formData.name}\n📞 Phone: ${formData.phone}\n💼 Service: ${formData.service}`;
-    const whatsappUrl = `https://wa.me/918332837703?text=${encodeURIComponent(text)}`;
+    const whatsappUrl = `https://wa.me/918106620096?text=${encodeURIComponent(text)}`;
 
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     handleClose();

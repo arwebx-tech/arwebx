@@ -45,7 +45,7 @@ export default function Footer() {
             <ul className="footer-links footer-contact-links">
               <li>
                 <a
-                  href="https://wa.me/918332837703"
+                  href="https://wa.me/918106620096"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Contact ARWEBX on WhatsApp"
@@ -55,7 +55,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="tel:+918332837703" aria-label="Call ARWEBX">
+                <a href="tel:+918106620096" aria-label="Call ARWEBX">
                   <i className="bi bi-telephone" aria-hidden="true"></i>
                   Call Now
                 </a>

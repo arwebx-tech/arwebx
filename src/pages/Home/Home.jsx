@@ -121,7 +121,7 @@ export default function Home() {
                 <i className="bi bi-arrow-right ms-2" aria-hidden="true"></i>
               </Link>
               <a
-                href="https://wa.me/918332837703"
+                href="https://wa.me/918106620096"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-cta-whatsapp"

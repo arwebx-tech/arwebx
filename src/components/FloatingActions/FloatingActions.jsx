@@ -11,15 +11,15 @@ export default function FloatingActions() {
   return (
     <div className="floating-actions" role="complementary" aria-label="Quick contact">
       <a
-        href="tel:+918332837703"
+        href="tel:+918106620096"
         className="floating-btn floating-call"
-        aria-label="Call ARWEBX at 8332837703"
+        aria-label="Call ARWEBX at 8106620096"
       >
         <span className="floating-tooltip">Call Now🤙 </span>
         <i className="bi bi-telephone-fill" aria-hidden="true"></i>
       </a>
       <a
-        href={`https://wa.me/918332837703?text=${encodeURIComponent('Hi ARWEBX! I visited your website and I am interested in getting a website built for my business. Can we discuss?')}`}
+        href={`https://wa.me/918106620096?text=${encodeURIComponent('Hi ARWEBX! I visited your website and I am interested in getting a website built for my business. Can we discuss?')}`}
         target="_blank"
         rel="noopener noreferrer"
         className="floating-btn floating-whatsapp"

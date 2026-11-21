@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-react-CPYPbbnH.js";var t=e();function n({label:e,title:n,subtitle:r,align:i=`center`}){return(0,t.jsxs)(`div`,{className:`section-heading text-${i}`,children:[e&&(0,t.jsx)(`span`,{className:`section-label`,children:e}),(0,t.jsx)(`h2`,{className:`section-title`,children:n}),r&&(0,t.jsx)(`p`,{className:`section-subtitle`,children:r})]})}export{n as t};
